@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "275322908869",
+    "firebase_url": "https://tesis-glpsc.firebaseio.com",
+    "project_id": "tesis-glpsc",
+    "storage_bucket": "tesis-glpsc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275322908869:android:225f1755e8c16f3ce700ac",
+        "android_client_info": {
+          "package_name": "com.denisse.inventario"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "275322908869-qdpajaah9mn54vll521jjt9j6ng1hkee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3o5yfK7AHRFDKAYxghlxOPUosItCCFsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "275322908869-qdpajaah9mn54vll521jjt9j6ng1hkee.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

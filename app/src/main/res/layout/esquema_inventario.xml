@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="7dp"
+    app:cardUseCompatPadding="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Código"
+            android:textColor="@color/colorBlackDark"
+            android:textStyle="bold"
+            android:textSize="15.3dp"/>
+
+        <EditText
+            android:id="@+id/txtCodigo"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Código"
+            android:textSize="15dp"
+            android:background="@drawable/format_edittext"
+            android:paddingTop="2dp"
+            android:paddingBottom="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:singleLine="true"
+            android:inputType="textCapWords"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="Descripción"
+            android:textColor="@color/colorBlackDark"
+            android:textStyle="bold"
+            android:textSize="15.3dp"/>
+
+        <EditText
+            android:id="@+id/txtDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Descripción"
+            android:textSize="15dp"
+            android:background="@drawable/format_edittext"
+            android:paddingTop="2dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="5dp"
+            android:singleLine="true"
+            android:inputType="textAutoComplete"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="Tipo"
+            android:textColor="@color/colorBlackDark"
+            android:textStyle="bold"
+            android:textSize="15.3dp"/>
+
+        <EditText
+            android:id="@+id/txtTipo"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Tipo"
+            android:textSize="15dp"
+            android:background="@drawable/format_edittext"
+            android:paddingTop="2dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="5dp"
+            android:singleLine="true"
+            android:inputType="textCapWords"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="Área del Empleado"
+            android:textColor="@color/colorBlackDark"
+            android:textStyle="bold"
+            android:textSize="15.3dp"/>
+
+        <Spinner
+            android:id="@+id/sp_area"
+            android:layout_width="match_parent"
+            android:background="@drawable/style_spinner"
+            android:layout_height="40dp"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
