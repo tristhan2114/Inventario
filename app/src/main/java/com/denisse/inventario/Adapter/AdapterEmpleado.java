@@ -50,6 +50,7 @@ public class AdapterEmpleado extends RecyclerView.Adapter<AdapterEmpleado.ViewHo
         holder.lblNames.setText(name);
         holder.lblCedula.setText("C.I. "+item.getCi());
         holder.img_empleado.setImageBitmap(ActivityFragmentUtils.getBitmapBase64(context, item.getFoto()));
+        holder.img_empleado.setScaleType(ImageView.ScaleType.FIT_XY);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -72,6 +72,7 @@ public class InventarioListFragment extends Fragment {
         context = getActivity();
         initializeToolbar();
         startWidgets();
+        getListInvetario();
         return view;
     }
 
@@ -133,7 +134,7 @@ public class InventarioListFragment extends Fragment {
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getListEmpleados();
+                getListInvetario();
                 refresh.setRefreshing(false);
             }
         });
@@ -163,18 +164,18 @@ public class InventarioListFragment extends Fragment {
 
     private void getListEmpleadoByParams(String params) {
         if(ActivityFragmentUtils.isConnetionNetwork(context)){
-            FirebaseInventario.getInventarioByParams(params, new FirebaseInventario.FbRsInventario() {
+            FirebaseInventario.getInventarioByParams(context, params, new FirebaseInventario.FbRsInventario() {
                 @Override
-                public void isSuccesError(boolean isSucces, List<Inventario> inventarios) {
+                public void isSuccesError(boolean isSucces, String msg, List<Inventario> inventarios) {
                     if(isSucces){
                         loadAdapter(inventarios);
                     }else{
-                        msgError("No hay Imventario registrados");
+                        msgError(msg);
                     }
                 }
             });
         }else{
-            Toast.makeText(context, "no nettt", 3000).show();
+            //Toast.makeText(context, "no nettt", 3000).show();
             ActivityFragmentUtils.ShowMessage("Verifica tu conexión a internet", context, new ActivityFragmentUtils.onClickDialog() {
                 @Override
                 public void onClickDialog(DialogInterface dialog, int id) {
@@ -184,15 +185,16 @@ public class InventarioListFragment extends Fragment {
         }
     }
 
-    private void getListEmpleados() {
+    private void getListInvetario() {
         if(ActivityFragmentUtils.isConnetionNetwork(context)){
-            FirebaseInventario.getEmpleados(new FirebaseInventario.FbRsInventario() {
+            FirebaseInventario.getInventarios(context, new FirebaseInventario.FbRsInventario() {
                 @Override
-                public void isSuccesError(boolean isSucces, List<Inventario> inventarios) {
+                public void isSuccesError(boolean isSucces, String msg, List<Inventario> inventarios) {
+                    Log.e("Error-",".1. "+isSucces+ " .. -  "+msg);
                     if(isSucces){
                         loadAdapter(inventarios);
                     }else{
-                        msgError("No hay Imventario registrados");
+                        msgError(msg);
                     }
                 }
             });
@@ -227,7 +229,6 @@ public class InventarioListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getListEmpleados();
     }
 
 }

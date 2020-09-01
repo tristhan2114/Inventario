@@ -123,6 +123,35 @@ public class ActivityFragmentUtils {
         return null;
     }
 
+    public static AlertDialog ShowMessageDefault(String mensaje, Context context, final onClickDialog onClick) {
+        try {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage(Html.fromHtml("<font color='#2a2a2a' style='font-size: 10px'>" + mensaje + "</font>"));
+            builder.setPositiveButton(
+                    "Aceptar",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            onClick.onClickDialog(dialog, id);
+                        }
+                    });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+
+            positiveButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            positiveButton.setTextColor(context.getResources().getColorStateList(R.color.colorPrimary));
+
+            return dialog;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
 
 
     static Area area = null;
@@ -178,7 +207,12 @@ public class ActivityFragmentUtils {
 
                 if(area != null && !area.getDescripcion().equals("- SELECCIONE UNA OPCIÓN -")){
                     Inventario inventario = new Inventario("0", codigo, descripcion, tipo, area);
-                    FirebaseInventario.createInventrio(inventario);
+                    FirebaseInventario.createInventrio(context, inventario, new FirebaseInventario.FbRsInventario() {
+                        @Override
+                        public void isSuccesError(boolean isSucces, String msg,  List<Inventario> inventarios) {
+
+                        }
+                    });
                     MyDialog.dismiss();
                 }else {
                     ShowMessage("Debe seleccionar un área", context, new onClickDialog() {

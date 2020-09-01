@@ -31,6 +31,8 @@ import com.denisse.inventario.R;
 import com.denisse.inventario.Utils.ActivityFragmentUtils;
 import com.denisse.inventario.Utils.EmpleadoUtils.FirebaseEmpleado;
 
+import java.util.List;
+
 public class EmpleadoCreateFragment extends Fragment {
 
     private Context context;
@@ -103,12 +105,15 @@ public class EmpleadoCreateFragment extends Fragment {
 
     private void setterData() {
         txtNombres.setText(empleadoData.getNombres());
+        txtNombres.setEnabled(false);
         txtNombres.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
 
         txtApellidos.setText(empleadoData.getApellidos());
+        txtApellidos.setEnabled(false);
         txtApellidos.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
 
         txtCedula.setText(empleadoData.getCi());
+        txtCedula.setEnabled(false);
         txtCedula.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
 
         txtEdad.setText(String.valueOf(empleadoData.getEdad()));
@@ -248,24 +253,60 @@ public class EmpleadoCreateFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // realizo accion Guardar o Actualizar segun campo action
-                String msg = isSpinner ? "Se procederá a actualizar registro" : "Se procederá a guardar registro";
-                ActivityFragmentUtils.ShowMessage(msg, context, new ActivityFragmentUtils.onClickDialog() {
-                    @Override
-                    public void onClickDialog(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                        switch (name){
-                            case "Guardar":
-                                FirebaseEmpleado.createEmpleado(createDataEmpleado(false));
-                                break;
-                            case "Actualizar":
-                                FirebaseEmpleado.updateEmpleado(createDataEmpleado(true));
-                                break;
-                            default:
+                if(validate()){
+                    String msg = isSpinner ? "<b>Se procederá a actualizar registro</b>" : "<b>Se procederá a guardar registro</b>";
+                    String msgConfirm = "<br>"+
+                            txtNombres.getText().toString()+" "+txtApellidos.getText().toString()+"<br>"+
+                            "<b>Ci:</b> "+txtCedula.getText().toString()+"<br>"+
+                            "<b>Área:</b> "+area.getDescripcion()+"<br>"+
+                            "<b>Jornada:</b> "+jornada.getDescripcion()+"<br>";
+                    ActivityFragmentUtils.ShowMessage(msg+msgConfirm, context, new ActivityFragmentUtils.onClickDialog() {
+                        @Override
+                        public void onClickDialog(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            switch (name){
+                                case "Guardar":
+                                    FirebaseEmpleado.checkEmpleadoExit(txtCedula.getText().toString(), new FirebaseEmpleado.FbRsEmpleado() {
+                                        @Override
+                                        public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
+                                            if(isSucces){
+                                                msgDlg("Empleado con cédula: "+txtCedula.getText().toString() + " ya existe.");
+                                            }else{
+                                                FirebaseEmpleado.createEmpleado(context, createDataEmpleado(false), new FirebaseEmpleado.FbRsEmpleado() {
+                                                    @Override
+                                                    public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
+                                                        if(isSucces){
+                                                            msgDlg(msg);
+                                                        }else{
+                                                            msgDlg(msg);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
 
-                                break;
+
+                                    break;
+                                case "Actualizar":
+                                    FirebaseEmpleado.updateEmpleado(context, createDataEmpleado(true), new FirebaseEmpleado.FbRsEmpleado() {
+                                        @Override
+                                        public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
+                                            if(isSucces){
+                                                msgDlg(msg);
+                                            }else{
+                                                msgDlg(msg);
+                                            }
+                                        }
+                                    });
+                                    break;
+                                default:
+
+                                    break;
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
     }
@@ -285,6 +326,38 @@ public class EmpleadoCreateFragment extends Fragment {
         return empleado;
     }
 
+    boolean validate(){
+        boolean respuesta = false;
+        if(txtNombres.getText().toString().isEmpty()){
+            msgDlg("Ingrese los nombres del empleado");
+        }else if(txtApellidos.getText().toString().isEmpty()){
+            msgDlg("Ingrese los apellidos del empleado");
+        }else if(txtCedula.getText().toString().isEmpty()){
+            msgDlg("Ingrese cédula del empleado");
+        }else if(txtEdad.getText().toString().isEmpty()){
+            msgDlg("Ingrese edad del empleado");
+        }else if(txtCedula.getText().toString().trim().length() < 10){
+            msgDlg("la cédula debe tener 10 dígitos");
+        }else if(area == null){
+            msgDlg("Debe seleccionar un área del empleado");
+        }else if(jornada == null){
+            msgDlg("Debe seleccionar un jornada del empleado");
+        }else if(genero == null){
+            msgDlg("Debe seleccionar un genero del empleado");
+        }else{
+            respuesta = true;
+        }
+        return respuesta;
+    }
+
+    void msgDlg(String msg){
+        ActivityFragmentUtils.ShowMessageDefault(msg, context, new ActivityFragmentUtils.onClickDialog() {
+            @Override
+            public void onClickDialog(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+    }
     // obtiene imagen de galeria
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

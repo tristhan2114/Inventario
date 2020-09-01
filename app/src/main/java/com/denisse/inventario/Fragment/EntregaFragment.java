@@ -118,9 +118,9 @@ public class EntregaFragment extends Fragment {
     }
 
     private void getListEmpleadoByParams(String params) {
-        FirebaseEmpleado.getEmpleadosByParams(params, new FirebaseEmpleado.FbRsEmpleado() {
+        FirebaseEmpleado.getEmpleadosByParams(context, params, new FirebaseEmpleado.FbRsEmpleado() {
             @Override
-            public void isSuccesError(boolean isSucces, List<Empleado> empleados) {
+            public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
                 if(isSucces){
                     lyData.setVisibility(View.VISIBLE);
                     lyError.setVisibility(View.GONE);

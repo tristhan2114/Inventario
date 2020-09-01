@@ -55,9 +55,10 @@
 
                 <ImageView
                     android:id="@+id/img_empleado"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@color/colorPrimary"/>
+                    android:layout_width="85dp"
+                    android:layout_height="95dp"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_reporte"/>
 
                 <TextView
                     android:id="@+id/lblNames"

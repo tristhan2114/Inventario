@@ -69,6 +69,7 @@ public class EmpleadoListFragment extends Fragment {
         context = getActivity();
         initializeToolbar();
         startWidgets();
+        getListEmpleados();
         return view;
     }
 
@@ -165,33 +166,33 @@ public class EmpleadoListFragment extends Fragment {
     }
 
     private void getListEmpleadoByParams(String params) {
-        FirebaseEmpleado.getEmpleadosByParams(params, new FirebaseEmpleado.FbRsEmpleado() {
+        FirebaseEmpleado.getEmpleadosByParams(context, params, new FirebaseEmpleado.FbRsEmpleado() {
             @Override
-            public void isSuccesError(boolean isSucces, List<Empleado> empleados) {
+            public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
                 if(isSucces){
                     loadAdapter(empleados);
                 }else{
-                    msgError("No hay Empleados registrados");
+                    msgError(msg);
                 }
             }
         });
     }
 
     private void getListEmpleados() {
-        FirebaseEmpleado.getEmpleados(new FirebaseEmpleado.FbRsEmpleado() {
+        FirebaseEmpleado.getEmpleados(context, new FirebaseEmpleado.FbRsEmpleado() {
             @Override
-            public void isSuccesError(boolean isSucces, List<Empleado> empleados) {
+            public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
                 if(isSucces){
                     loadAdapter(empleados);
                 }else{
-                    msgError("No hay Empleados registrados");
+                    msgError(msg);
                 }
             }
         });
     }
 
     private void loadAdapter(List<Empleado> empleados) {
-        Log.e("Error-",".5. "+empleados.toString());
+        //Log.e("Error-",".5. "+empleados.toString());
         adapterEmpleado = new AdapterEmpleado(context, empleados, new AdapterEmpleado.OnCardClickListner() {
             @Override
             public void OnCardClicked(View view, int position) {
@@ -211,6 +212,5 @@ public class EmpleadoListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getListEmpleados();
     }
 }

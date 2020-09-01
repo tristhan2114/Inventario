@@ -1,10 +1,17 @@
 package com.denisse.inventario.Utils.EmpleadoUtils;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.denisse.inventario.Model.Empleado.Empleado;
 import com.denisse.inventario.Utils.Constantes;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,6 +26,7 @@ import java.util.Map;
 
 public class FirebaseEmpleado {
 
+    private static ProgressDialog progressDialog;
 
     public static FirebaseDatabase getmDatabase(){
         FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
@@ -30,7 +38,32 @@ public class FirebaseEmpleado {
         return mDatabaseReference;
     }
 
-    public static void getEmpleadosByParams(String params, FbRsEmpleado rsEmpleado){
+    private static void loading(Context context){
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Procesando....");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+    }
+
+    public static void auth(Activity activity, String email, String password){
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if(firebaseAuth.getUid() == null){
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        Log.e("Error-cr", "Correcto");
+                    }else{
+                        Log.e("Error-cr", "Error");
+                    }
+                }
+            });
+        }
+        //firebaseAuth.signOut();
+    }
+
+    public static void getEmpleadosByParams(Context context, String params, FbRsEmpleado rsEmpleado){
+        loading(context);
         DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
         Query myTopPostsQuery = databaseReference.orderByChild("ci").equalTo(params);
         myTopPostsQuery.addValueEventListener(new ValueEventListener() {
@@ -39,32 +72,59 @@ public class FirebaseEmpleado {
                 //Log.e("Error-",".0. "+dataSnapshot.toString());
                 if (dataSnapshot.exists()) {
                     try {
+                        List<Empleado> empleados = (List<Empleado>) dataSnapshot.getValue(Empleado.class);
                         //Log.e("Error-",".1. "+dataSnapshot.toString());
-                        List<Empleado> empleados = new ArrayList<>();
+                        /*List<Empleado> empleados = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             //Log.e("Error-",".2. "+child.toString());
                             Empleado empleado = child.getValue(Empleado.class);
                             //Log.e("Error-",".3. "+empleado.toString());
                             empleados.add(empleado);
-                        }
-                        rsEmpleado.isSuccesError(true, empleados);
+                        }*/
+                        progressDialog.dismiss();
+                        rsEmpleado.isSuccesError(true, "", empleados);
                     }catch (Exception e){
-                        //Log.e("Error-",e.getMessage());
-                        rsEmpleado.isSuccesError(false, new ArrayList<>());
+                        Log.e("Error-",e.getMessage());
+                        progressDialog.dismiss();
+                        rsEmpleado.isSuccesError(false, "", new ArrayList<>());
                     }
                 }else {
-                    rsEmpleado.isSuccesError(false, new ArrayList<>());
+                    progressDialog.dismiss();
+                    rsEmpleado.isSuccesError(false, "", new ArrayList<>());
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                rsEmpleado.isSuccesError(false, new ArrayList<>());
+                progressDialog.dismiss();
+                rsEmpleado.isSuccesError(false, "", new ArrayList<>());
             }
         });
     }
 
-    public static void getEmpleados(FbRsEmpleado rsEmpleado){
+    public static void checkEmpleadoExit(String cedula, FbRsEmpleado rsEmpleado){
+        //loading(context);
+        DatabaseReference reference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
+        Query query = reference.orderByChild("ci").equalTo(cedula).limitToFirst(1);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    rsEmpleado.isSuccesError(true, "", new ArrayList<>());
+                }else{
+                    rsEmpleado.isSuccesError(false, "", new ArrayList<>());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                rsEmpleado.isSuccesError(false, "", new ArrayList<>());
+            }
+        });
+
+    }
+
+    public static void getEmpleados(Context context, FbRsEmpleado rsEmpleado){
+        loading(context);
         DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
         ValueEventListener eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -79,47 +139,74 @@ public class FirebaseEmpleado {
                             //Log.e("Error-",".3. "+empleado.toString());
                             empleados.add(empleado);
                         }
-                        rsEmpleado.isSuccesError(true, empleados);
+                        progressDialog.dismiss();
+                        rsEmpleado.isSuccesError(true, "ok", empleados);
                     }catch (Exception e){
                         //Log.e("Error-",e.getMessage());
-                        rsEmpleado.isSuccesError(false, new ArrayList<>());
+                        progressDialog.dismiss();
+                        rsEmpleado.isSuccesError(false, "No hay Empleados registrados", new ArrayList<>());
                     }
                 }else {
-                    rsEmpleado.isSuccesError(false, new ArrayList<>());
+                    progressDialog.dismiss();
+                    rsEmpleado.isSuccesError(false, "No hay Empleados registrados", new ArrayList<>());
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                rsEmpleado.isSuccesError(false, new ArrayList<>());
+                Log.e("Error-dtf", ".- "+databaseError.toString());
+                progressDialog.dismiss();
+                rsEmpleado.isSuccesError(false, "No hay Imventario registrados e-database", new ArrayList<>());
             }
         });
         databaseReference.addValueEventListener(eventListener);
     }
 
-    public static void createEmpleado(Empleado empleado){
+    public static void createEmpleado(Context context, Empleado empleado, FbRsEmpleado rsEmpleado){
+        loading(context);
         DatabaseReference databaseReference = getmDatabaseReferenceSave();
         String id = databaseReference.push().getKey();
         empleado.setId(id);
         Map<String, Object> valuedata = empleado.toMap();
         Map<String, Object> objectdata = new HashMap<>();
         objectdata.put(Constantes.REQUEST_EMPLEADOS + id + "/", valuedata);
-        databaseReference.updateChildren(objectdata);
+        databaseReference.updateChildren(objectdata).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                progressDialog.dismiss();
+                if(task.isSuccessful()){
+                    rsEmpleado.isSuccesError(false, "Empleado Guardado con exito.", new ArrayList<>());
+                }else{
+                    rsEmpleado.isSuccesError(true, "Hubo un error al guardar empleado.", new ArrayList<>());
+                }
+            }
+        });
         databaseReference.keepSynced(true);
     }
 
-    public static void updateEmpleado(Empleado empleado){
+    public static void updateEmpleado(Context context, Empleado empleado, FbRsEmpleado rsEmpleado){
+        loading(context);
         DatabaseReference databaseReference = getmDatabase()
                 .getReference(Constantes.REQUEST_EMPLEADOS)
                 .child(String.valueOf(empleado.getId()));
         Map<String, Object> valuedata = empleado.toMap();
-        databaseReference.updateChildren(valuedata);
+        databaseReference.updateChildren(valuedata).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                progressDialog.dismiss();
+                if(task.isSuccessful()){
+                    rsEmpleado.isSuccesError(false, "Empleado editado con exito.", new ArrayList<>());
+                }else{
+                    rsEmpleado.isSuccesError(true, "Hubo un error al editar empleado.", new ArrayList<>());
+                }
+            }
+        });
         databaseReference.keepSynced(true);
     }
 
 
 
     public interface FbRsEmpleado {
-        void isSuccesError(boolean isSucces, List<Empleado> empleados);
+        void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados);
     }
 }
