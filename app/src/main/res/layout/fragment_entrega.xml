@@ -21,38 +21,141 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/colorBlack"
+                android:text="Entrega de implemtos"
+                android:textStyle="bold"
+                android:textSize="16dp"/>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardDepartamento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="3dp"
+                    android:layout_marginStart="7dp"
+                    app:cardBackgroundColor="@color/md_light_blue_500"
+                    app:cardElevation="5dp"
+                    android:layout_gravity="center"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="7dp"
+                        android:layout_marginEnd="7dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_gravity="center">
+
+                        <TextView
+                            android:id="@+id/lblCardDepartamento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18dp"
+                            android:textColor="@color/colorWhite"
+                            android:text="Departamento"/>
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/colorBlack"
-                    android:text="Cédula:"
-                    android:textSize="17dp"/>
+                    android:gravity="center"
+                    android:layout_weight="1">
 
-                <EditText
-                    android:id="@+id/txtCedula"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:hint="cédula del empleado"
-                    android:textSize="15dp"
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cardArea"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="150dp"
+                        app:cardCornerRadius="3dp"
+                        android:layout_marginStart="7dp"
+                        app:cardBackgroundColor="@color/colorBlackDark"
+                        app:cardElevation="5dp"
+                        app:cardUseCompatPadding="true">
 
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:background="@drawable/border_edittext"
-                    android:maxLines="1"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
+                            android:layout_marginEnd="7dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginBottom="3dp"
+                            android:layout_gravity="center">
 
-                    android:layout_marginStart="8dp"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="5dp"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:singleLine="true"/>
+                            <TextView
+                                android:id="@+id/lblCardArea"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18dp"
+                                android:textColor="@color/colorWhite"
+                                android:text="Área"/>
+
+                        </LinearLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cardEmpleado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="150dp"
+                        app:cardCornerRadius="3dp"
+                        android:layout_marginStart="7dp"
+                        app:cardBackgroundColor="@color/colorBlackDark"
+                        app:cardElevation="5dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
+                            android:layout_marginEnd="7dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginBottom="3dp"
+                            android:layout_gravity="center">
+
+                            <TextView
+                                android:id="@+id/lblCardEmpleado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18dp"
+                                android:textColor="@color/colorWhite"
+                                android:text="Empleado"/>
+
+                        </LinearLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -63,96 +166,183 @@
                 android:layout_marginEnd="10dp"
                 android:background="@color/md_grey_300"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:textColor="@color/colorBlack"
-                android:text="Información del Empleado"
-                android:textSize="16dp"/>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/btnRegistrarEmpleado"
+            <LinearLayout
+                android:id="@+id/lyEmpleado"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="7dp"
-                android:layout_margin="2dp"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="2dp">
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
-                    <LinearLayout
-                        android:id="@+id/lyError"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_margin="10dp">
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorBlack"
+                        android:text="Cédula:"
+                        android:textSize="17dp"/>
 
-                        <TextView
-                            android:id="@+id/lblError"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Error no se encuentra empledo buscado con la cedula ...."
-                            android:textSize="17dp"/>
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/lyData"
+                    <EditText
+                        android:id="@+id/txtCedula"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_margin="5dp">
-
-                        <TextView
-                            android:id="@+id/lblNames"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Nombres y apellidos del empleado\nJonathan Mullo"
-                            android:textSize="16dp"/>
-
-                        <TextView
-                            android:id="@+id/lblDepartamento"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="Departamento: \nPouch pack"
-                            android:textSize="16dp"/>
-
-                        <TextView
-                            android:id="@+id/lblArea"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="Area: \nMantenimiento"
-                            android:textSize="16dp"/>
-
-                        <TextView
-                            android:id="@+id/lblFechIngreso"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="Fecha Ingreso: 15/25/2012"
-                            android:textSize="16dp"/>
-
-                    </LinearLayout>
+                        android:layout_height="40dp"
+                        android:hint="cédula del empleado"
+                        android:textSize="15dp"
+                        android:maxLength="10"
+                        android:imeOptions="actionSearch"
+                        android:inputType="phone"
+                        android:background="@drawable/format_edittext"
+                        android:maxLines="1"
+                        android:layout_marginStart="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="5dp"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:singleLine="true"/>
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+                <LinearLayout
+                    android:id="@+id/lyRsEmpleado"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@color/md_grey_300"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/colorBlack"
+                        android:text="Información del Empleado"
+                        android:textSize="16dp"/>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/btnRegistrarEmpleado"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="7dp"
+                        android:layout_margin="2dp"
+                        app:cardElevation="5dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="2dp">
+
+                            <LinearLayout
+                                android:id="@+id/lyError"
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_margin="10dp">
+
+                                <TextView
+                                    android:id="@+id/lblError"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Error no se encuentra empledo buscado con la cedula ...."
+                                    android:textSize="17dp"/>
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/lyData"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_margin="5dp">
+
+                                <TextView
+                                    android:id="@+id/lblNames"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Nombres y apellidos del empleado\nJonathan Mullo"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/lblDepartamento"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="Departamento: \nPouch pack"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/lblArea"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="Area: \nMantenimiento"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/lblFechIngreso"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="Fecha Ingreso: 15/25/2012"
+                                    android:textSize="16dp"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyDepartamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/sp_departamento"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/style_spinner"
+                    android:layout_height="40dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyArea"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/sp_area"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/style_spinner"
+                    android:layout_height="40dp"/>
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -171,20 +361,58 @@
                 android:text="Detalle"
                 android:textSize="16dp"/>
 
+            <android.support.v7.widget.CardView
+                android:id="@+id/btnAddRv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="3dp"
+                android:layout_marginStart="7dp"
+                app:cardBackgroundColor="@color/md_light_blue_500"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:textColor="@color/colorWhite"
+                        android:text="Agregar"/>
+
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/lb"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="recyclerview con todo lo q no he hecho"
                     android:textSize="16dp"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvEntrega"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/row_item_entrega"/>
 
             </LinearLayout>
 

@@ -10,11 +10,14 @@
 
 
     <color name="colorGray">#434343</color>
+    <color name="colorGray2">#F6F4F4</color>
     <color name="dividerColor">#B6B6B6</color>
     <color name="md_light_blue_500">#03a9f4</color>
     <color name="border_text">#F2F3F5</color>
     <color name="md_grey_300">#e0e0e0</color>
     <color name="md_blue_200">#90caf9</color>
+    <color name="md_red_A700">#d50000</color>
+    <color name="md_light_blue_50">#e1f5fe</color>
 
     <color name="md_blue_A700">#2962ff</color>
 

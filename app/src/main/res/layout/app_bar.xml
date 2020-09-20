@@ -69,6 +69,22 @@
                 android:visibility="gone"
                 android:layout_marginRight="35dp"/>
 
+            <TextView
+                android:id="@+id/lblTileToolBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:paddingTop="5px"
+                android:paddingBottom="5px"
+                android:visibility="gone"
+                android:text=""
+                android:singleLine="true"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:layout_marginRight="35dp"/>
+
             <android.support.v7.widget.AppCompatButton
                 android:src="@mipmap/search"
                 android:id="@+id/btnSearch"

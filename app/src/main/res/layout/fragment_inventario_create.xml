@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".Fragment.Empleado.EmpleadoListFragment">
+    android:orientation="vertical">
     <include
         android:visibility="visible"
         layout="@layout/app_bar"/>
@@ -57,7 +56,7 @@
                         android:paddingEnd="5dp"
                         android:paddingBottom="5dp"
                         android:singleLine="true"
-                        android:inputType="textAutoComplete"/>
+                        android:inputType="textCapSentences|textAutoComplete"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -81,7 +80,7 @@
                         android:paddingEnd="5dp"
                         android:paddingBottom="5dp"
                         android:singleLine="true"
-                        android:inputType="textAutoComplete"/>
+                        android:inputType="textCapSentences|textAutoComplete"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -129,7 +128,7 @@
                         android:paddingEnd="5dp"
                         android:paddingBottom="5dp"
                         android:singleLine="true"
-                        android:inputType="textAutoComplete"/>
+                        android:inputType="textCapSentences|textAutoComplete"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -141,19 +140,19 @@
                         android:textStyle="bold"
                         android:textSize="15.3dp"/>
 
-                    <EditText
+                    <TextView
                         android:id="@+id/txtFechRegistro"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:hint="Fecha registro"
                         android:textSize="15dp"
+                        android:gravity="center|start"
                         android:background="@drawable/format_edittext"
                         android:paddingTop="2dp"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:paddingBottom="5dp"
-                        android:singleLine="true"
-                        android:inputType="textAutoComplete"/>
+                        android:singleLine="true"/>
 
                 </LinearLayout>
 

@@ -40,10 +40,11 @@
 
                         <ImageView
                             android:id="@+id/img_empleado"
-                            android:layout_width="120dp"
-                            android:layout_height="120dp"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@mipmap/ic_launcher"
+                            android:src="@drawable/ic_profile_default_dr"
+                            android:scaleType="centerCrop"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -54,9 +55,8 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="92dp"
-                            android:background="@color/colorWhite"
-                            android:src="@android:drawable/ic_menu_search"
+                            android:layout_marginTop="90dp"
+                            android:src="@mipmap/ic_camera"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.666"
                             app:layout_constraintStart_toStartOf="parent"
@@ -174,7 +174,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="5dp"
-                            android:text="Género del Empleado"
+                            android:text="Género"
                             android:textColor="@color/colorBlackDark"
                             android:textStyle="bold"
                             android:textSize="15.3dp"/>
@@ -190,13 +190,29 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="5dp"
-                            android:text="Área del Empleado"
+                            android:text="Departamento"
                             android:textColor="@color/colorBlackDark"
                             android:textStyle="bold"
                             android:textSize="15.3dp"/>
 
                         <Spinner
                             android:id="@+id/sp_area"
+                            android:layout_width="match_parent"
+                            android:background="@drawable/style_spinner"
+                            android:layout_height="40dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="Área"
+                            android:textColor="@color/colorBlackDark"
+                            android:textStyle="bold"
+                            android:textSize="15.3dp"/>
+
+                        <Spinner
+                            android:id="@+id/sp_Puesto"
                             android:layout_width="match_parent"
                             android:background="@drawable/style_spinner"
                             android:layout_height="40dp"/>
@@ -228,7 +244,7 @@
                                 android:layout_weight="0.96"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="5dp"
-                                android:text="Estado del Empleado"
+                                android:text="Estado"
                                 android:textColor="@color/colorBlackDark"
                                 android:textStyle="bold"
                                 android:textSize="15.3dp"/>
