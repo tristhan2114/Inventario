@@ -5,7 +5,7 @@ public class Constantes {
     public static boolean ISPRODUCTION = false;
 
     public static final String REQUEST_EMPLEADOS = ISPRODUCTION ? "/EMPLEADOS/" : "/TEST_EMPLEADOS/";
-    public static final String REQUEST_ADMINISTRACION = ISPRODUCTION ? "/ADMINISTRACION/" : "/TEST_ADMINISTRACION/";
+    public static final String REQUEST_USUARIO = ISPRODUCTION ? "/USUARIO/" : "/TEST_USUARIO/";
     public static final String REQUEST_IMPLEMENTOS = ISPRODUCTION ? "/IMPLEMENTOS/" : "/TEST_IMPLEMENTOS/";
     public static final String REQUEST_ENTREGAS = ISPRODUCTION ? "/ENTREGAS/" : "/TEST_ENTREGAS/";
 

@@ -44,7 +44,7 @@ public class FirebaseAdministracion {
 
     public static void getUserLogin(Context context, String email, String contraseña, FbRsAdministracion rsAdministracion){
         loading(context);
-        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_ADMINISTRACION);
+        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_USUARIO);
         Query myTopPostsQuery = databaseReference.orderByChild("correo").equalTo(email).limitToFirst(1);
         myTopPostsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -85,7 +85,7 @@ public class FirebaseAdministracion {
 
     public static void getAdministracion(Context context, FbRsAdministracion rsAdministracion){
         loading(context);
-        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_ADMINISTRACION);
+        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_USUARIO);
         ValueEventListener eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -129,7 +129,7 @@ public class FirebaseAdministracion {
         administracion.setId(id);
         Map<String, Object> valuedata = administracion.toMap();
         Map<String, Object> objectdata = new HashMap<>();
-        objectdata.put(Constantes.REQUEST_ADMINISTRACION + id + "/", valuedata);
+        objectdata.put(Constantes.REQUEST_USUARIO + id + "/", valuedata);
         databaseReference.updateChildren(objectdata).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -146,7 +146,7 @@ public class FirebaseAdministracion {
 
     public static void deleteAdministracion(Context context, String id, FbRsAdministracion rsAdministracion){
         loading(context);
-        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_ADMINISTRACION).child(id);
+        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_USUARIO).child(id);
         databaseReference.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -163,7 +163,7 @@ public class FirebaseAdministracion {
     public static void updateAdministracion(Context context, Administracion administracion, FbRsAdministracion rsAdministracion){
         loading(context);
         DatabaseReference databaseReference = getmDatabase()
-                .getReference(Constantes.REQUEST_ADMINISTRACION)
+                .getReference(Constantes.REQUEST_USUARIO)
                 .child(String.valueOf(administracion.getId()));
         Map<String, Object> valuedata = administracion.toMap();
         databaseReference.updateChildren(valuedata).addOnCompleteListener(new OnCompleteListener<Void>() {

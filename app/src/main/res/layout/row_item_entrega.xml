@@ -83,7 +83,7 @@
 
                 <CheckBox
                     android:id="@+id/cbNuevo"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
                     android:textColor="@color/colorGray"
@@ -107,7 +107,7 @@
 
                 <CheckBox
                     android:id="@+id/cbReposicion"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
                     android:textColor="@color/colorGray"
@@ -134,7 +134,7 @@
                     android:id="@+id/txtTalla"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="60dp"
+                    android:minHeight="35dp"
                     android:layout_marginTop="5dp"
                     android:padding="3dp"
                     android:gravity="start"

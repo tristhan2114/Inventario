@@ -80,8 +80,8 @@ public class AdapterEntrega extends RecyclerView.Adapter<AdapterEntrega.ViewHold
             public void onClick(View view) {
                 listData.get(position).setNuevo(false);
                 listData.get(position).setReposicion(true);
-
                 holder.lyCambio.setVisibility(View.VISIBLE);
+
                 notifyDataSetChanged();
             }
         });
