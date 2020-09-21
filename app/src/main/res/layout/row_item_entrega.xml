@@ -73,48 +73,112 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Nuevo: "
-                    android:textColor="@color/md_light_blue_500"
-                    android:textSize="17dp"
-                    android:textStyle="bold"/>
+                    android:layout_weight="1">
 
-                <CheckBox
-                    android:id="@+id/cbNuevo"
-                    android:layout_width="wrap_content"
+                    <CheckBox
+                        android:id="@+id/cbNuevo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:text="Nuevo"
+                        android:textColor="@color/md_light_blue_500"
+                        android:textSize="17dp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:textColor="@color/colorGray"
-                    android:textSize="14dp"
-                    android:textStyle="bold"/>
+                    android:layout_weight="1">
+
+                    <CheckBox
+                        android:id="@+id/cbReposicion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:text="Reposición"
+                        android:textColor="@color/md_light_blue_500"
+                        android:textSize="17dp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Reposición: "
-                    android:textColor="@color/md_light_blue_500"
-                    android:textSize="17dp"
-                    android:textStyle="bold"/>
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
-                <CheckBox
-                    android:id="@+id/cbReposicion"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cantidad: "
+                        android:textColor="@color/md_light_blue_500"
+                        android:textSize="17dp"
+                        android:textStyle="bold"/>
+
+                    <EditText
+                        android:id="@+id/txtCantidad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="100dp"
+                        android:minHeight="35dp"
+                        android:layout_marginTop="5dp"
+                        android:padding="3dp"
+                        android:gravity="start|center"
+                        android:hint=""
+                        android:textColor="@color/colorBlack"
+                        android:background="@drawable/format_edittext"
+                        android:textSize="15dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:textColor="@color/colorGray"
-                    android:textSize="14dp"
-                    android:textStyle="bold"/>
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Talla: "
+                        android:textColor="@color/md_light_blue_500"
+                        android:textSize="17dp"
+                        android:textStyle="bold"/>
+
+                    <EditText
+                        android:id="@+id/txtTalla"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="100dp"
+                        android:minHeight="35dp"
+                        android:layout_marginTop="5dp"
+                        android:padding="3dp"
+                        android:gravity="start|center"
+                        android:hint="S, M, L"
+                        android:textColor ="@color/colorBlack"
+                        android:background="@drawable/format_edittext"
+                        android:textSize="15dp"/>
+
+                </LinearLayout>
 
             </LinearLayout>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -125,36 +189,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Talla: "
-                    android:textColor="@color/md_light_blue_500"
-                    android:textSize="17dp"
-                    android:textStyle="bold"/>
-
-                <EditText
-                    android:id="@+id/txtTalla"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="35dp"
-                    android:layout_marginTop="5dp"
-                    android:padding="3dp"
-                    android:gravity="start"
-                    android:hint="S, M, L"
-                    android:textColor="@color/colorBlack"
-                    android:background="@drawable/format_edittext"
-                    android:textSize="15dp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Descripción: "
+                    android:text="Código: "
                     android:textColor="@color/md_light_blue_500"
                     android:textSize="17dp"
                     android:textStyle="bold"/>
@@ -163,11 +198,14 @@
                     android:id="@+id/txtDescripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="60dp"
+                    android:minHeight="35dp"
                     android:layout_marginTop="5dp"
                     android:padding="3dp"
-                    android:gravity="start"
-                    android:hint="Gafas, camisa"
+                    android:gravity="start|center"
+                    android:hint="código"
+                    android:imeOptions="actionSearch"
+                    android:inputType="phone"
+                    android:maxLines="1"
                     android:textColor="@color/colorBlack"
                     android:background="@drawable/format_edittext"
                     android:textSize="15dp"/>

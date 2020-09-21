@@ -15,6 +15,7 @@ public class EntregaModel implements Serializable {
 
     private String id;
     private String tipo_entrega;
+    private String fecha_creacion;
     private Empleado empleado;
     private Departamento departamento;
     private Puesto puesto;
@@ -23,9 +24,10 @@ public class EntregaModel implements Serializable {
     public EntregaModel() {
     }
 
-    public EntregaModel(String id, String tipo_entrega, Empleado empleado, Departamento departamento, Puesto puesto, List<EntregaItem> entregaItems) {
+    public EntregaModel(String id, String tipo_entrega, String fecha_creacion, Empleado empleado, Departamento departamento, Puesto puesto, List<EntregaItem> entregaItems) {
         this.id = id;
         this.tipo_entrega = tipo_entrega;
+        this.fecha_creacion = fecha_creacion;
         this.empleado = empleado;
         this.departamento = departamento;
         this.puesto = puesto;
@@ -86,11 +88,21 @@ public class EntregaModel implements Serializable {
         this.puesto = puesto;
     }
 
+    @PropertyName("fecha_creacion")
+    public String getFecha_creacion() {
+        return fecha_creacion;
+    }
+
+    public void setFecha_creacion(String fecha_creacion) {
+        this.fecha_creacion = fecha_creacion;
+    }
+
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
         result.put("tipo_entrega", tipo_entrega);
+        result.put("fecha_creacion", fecha_creacion);
         result.put("departamento", departamento);
         result.put("puesto", puesto);
         result.put("empleado", empleado);

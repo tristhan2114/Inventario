@@ -3,6 +3,7 @@ package com.denisse.implemento.Fragment.Entrega;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import com.denisse.implemento.Model.Empleado.Departamento;
 import com.denisse.implemento.Model.Empleado.Puesto;
 import com.denisse.implemento.Model.Entrega.EntregaModel;
+import com.denisse.implemento.Model.Implemento;
 import com.denisse.implemento.R;
 import com.denisse.implemento.Utils.EmpleadoUtils.FirebaseEmpleado;
 import com.denisse.implemento.Adapter.AdapterEntrega;
@@ -32,6 +34,7 @@ import com.denisse.implemento.Model.Empleado.Empleado;
 import com.denisse.implemento.Model.Entrega.EntregaItem;
 import com.denisse.implemento.Utils.ActivityFragmentUtils;
 import com.denisse.implemento.Utils.EntregaUtils.FirebaseEntrega;
+import com.denisse.implemento.Utils.ImplementoUtils.FirebaseImplemento;
 import com.fastaccess.datetimepicker.DatePickerFragmentDialog;
 import com.fastaccess.datetimepicker.DateTimeBuilder;
 import com.fastaccess.datetimepicker.callback.DatePickerCallback;
@@ -66,6 +69,7 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
     private Puesto puesto;
 
     private int positionFecha = 0;
+    private Handler handler = new Handler();
 
 
     public EntregaFragment() {
@@ -150,11 +154,60 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
                     Log.e("Error-jj", e.getMessage());
                 }
             }
+
+            @Override
+            public void OnCardClickedSearch(int position, String search) {
+                buscarCodigoImplemento(position, search);
+            }
         });
         rvEntrega.setAdapter(adapterEntrega);
 
         loadSpinner();
 
+    }
+
+    private void buscarCodigoImplemento(int position, String search) {
+        ActivityFragmentUtils.hideTeclado(context, lblError);
+        if (search.isEmpty()){
+            ActivityFragmentUtils.ShowMessage("Debe poner un código de búsqueda", context, new ActivityFragmentUtils.onClickDialog() {
+                @Override
+                public void onClickDialog(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+        }else{
+            getListImplementoByParams(search, position);
+        }
+    }
+
+    private void getListImplementoByParams(String search, int position) {
+        if(ActivityFragmentUtils.isConnetionNetwork(context)){
+            FirebaseImplemento.getInventarioByParams(context, search, new FirebaseImplemento.FbRsImplemento() {
+                @Override
+                public void isSuccesError(boolean isSucces, String msg, List<Implemento> implementos) {
+                    if(isSucces){
+                        if(implementos.get(0).getCantidad() > 0){
+                            msgDialog("Hay en stock " + implementos.get(0).getCantidad() + "");
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    EntregaItem item = listEntregas.get(position);
+                                    item.setDescripcion(implementos.get(0).getDescripcion());
+                                    listEntregas.set(position, item);
+                                    adapterEntrega.notifyDataSetChanged();
+                                }
+                            });
+                        }else{
+                            msgDialog("La cantidad de elementos es 0");
+                        }
+                    }else{
+                        msgDialog(msg);
+                    }
+                }
+            });
+        }else{
+            msgDialog("Verifique su conexión a internet");
+        }
     }
 
     private void loadSpinner() {
@@ -268,25 +321,59 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
         });
 
         btnAddEntrega.setOnClickListener(view -> {
-          if(ActivityFragmentUtils.isConnetionNetwork(context)){
-              FirebaseEntrega.createEntrega(context, modelEntrega(), new FirebaseEntrega.FbRsEntregas() {
-                  @Override
-                  public void isSuccesError(boolean isSucces, String msg, List<EntregaModel> entregaModels) {
-                      if (isSucces){
-                          msgDialog(msg);
-                      }else{
-                          msgDialog(msg);
-                      }
-                  }
-              });
-          }else{
-              msgDialog("Verifica tu conexión a internet");
-          }
+            if (validateCampos()){
+                String data = "Estás seguro de guardar";
+                ActivityFragmentUtils.ShowMessage(data, context, new ActivityFragmentUtils.onClickDialog() {
+                    @Override
+                    public void onClickDialog(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        if(ActivityFragmentUtils.isConnetionNetwork(context)){
+                            FirebaseEntrega.createEntrega(context, modelEntrega(), new FirebaseEntrega.FbRsEntregas() {
+                                @Override
+                                public void isSuccesError(boolean isSucces, String msg, List<EntregaModel> entregaModels) {
+                                    if (isSucces){
+                                        msgDialog(msg);
+                                    }else{
+                                        msgDialog(msg);
+                                    }
+                                }
+                            });
+                        }else{
+                            msgDialog("Verifica tu conexión a internet");
+                        }
+                    }
+                });
+            }
         });
     }
 
+    private boolean validateCampos() {
+        boolean respuesta = true;
+        if(isDepartamento){
+            if(departamento == null){
+                msgDialog("Debe seleccionar un departamento");
+                return false;
+            }
+        }else if(isArea){
+            if(puesto == null){
+                msgDialog("Debe seleccionar un área");
+                return false;
+            }
+        }else if (isEmpleado){
+            if(empleado == null){
+                msgDialog("Debe seleccionar un empleado");
+                return false;
+            }
+        }
+        if(listEntregas == null || listEntregas.isEmpty() || listEntregas.size() < 0){
+            msgDialog("Debes agregar ítems");
+            respuesta = false;
+        }
+        return respuesta;
+    }
+
     private void msgDialog(String msg) {
-        ActivityFragmentUtils.ShowMessage(msg, context, new ActivityFragmentUtils.onClickDialog() {
+        ActivityFragmentUtils.ShowMessageDefault(msg, context, new ActivityFragmentUtils.onClickDialog() {
             @Override
             public void onClickDialog(DialogInterface dialog, int id) {
                 dialog.dismiss();
@@ -344,7 +431,7 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
             entregaModel.setTipo_entrega("empleado");
             entregaModel.setEmpleado(empleado);
         }
-
+        entregaModel.setFecha_creacion(ActivityFragmentUtils.getDateNowStr());
         entregaModel.setEntregaItems(listEntregas);
         return entregaModel;
     }
@@ -363,12 +450,10 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
     @Override
     public void onDateSet(long date) {
         EntregaItem item = listEntregas.get(positionFecha);
-        Log.e("Error-ññ", "xx "+listEntregas.toString());
+        //Log.e("Error-ññ", "xx "+listEntregas.toString());
         item.setFecha(ActivityFragmentUtils.getDateOnly1(date));
         listEntregas.set(positionFecha, item);
-        Log.e("Error-ññ", "x-x "+listEntregas.toString());
-        //adapterEntrega.updateData(listEntregas);
-        /*Log.e("Error-ññ", "xx "+listEntregas.toString());*/
+        //Log.e("Error-ññ", "x-x "+listEntregas.toString());
         adapterEntrega.notifyDataSetChanged();
     }
 

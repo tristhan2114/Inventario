@@ -28,7 +28,7 @@ public class HomeFragment extends Fragment {
     private Context context;
     private View view;
 
-    private CardView btnRegistrarInventario, btnRegistrarEmpleado, btnCerrarSesion, btnAdministracion, btnRegistrarEntregas;
+    private CardView btnRegistrarInventario, btnRegistrarEmpleado, btnCerrarSesion, btnAdministracion, btnRegistrarEntregas, btnRegistrarReportes;
 
     // toolbar
     private ImageButton btnBack;
@@ -118,6 +118,7 @@ public class HomeFragment extends Fragment {
         btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
         btnRegistrarInventario = view.findViewById(R.id.btnRegistrarInventario);
         btnRegistrarEmpleado = view.findViewById(R.id.btnRegistrarEmpleado);
+        btnRegistrarReportes = view.findViewById(R.id.btnRegistrarReportes);
 
         btnRegistrarEmpleado.setOnClickListener(view -> {
             Intent intent = new Intent(context, ContainerActivity.class);
@@ -155,6 +156,13 @@ public class HomeFragment extends Fragment {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
+        });
+
+        btnRegistrarReportes.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ContainerActivity.class);
+            intent.putExtra("action", "reporte");
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
     }
 }

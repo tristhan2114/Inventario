@@ -5,9 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -103,7 +105,7 @@ public class AdapterEntrega extends RecyclerView.Adapter<AdapterEntrega.ViewHold
             }
         });
 
-        holder.txtDescripcion.addTextChangedListener(new TextWatcher() {
+        /*holder.txtDescripcion.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -118,6 +120,18 @@ public class AdapterEntrega extends RecyclerView.Adapter<AdapterEntrega.ViewHold
             public void afterTextChanged(Editable editable) {
                 String str = holder.txtDescripcion.getText().toString();
                 listData.get(position).setDescripcion(str.toUpperCase());
+            }
+        });*/
+        holder.txtDescripcion.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    //searchAction(holder.txtDescripcion);
+                    String search = holder.txtDescripcion.getText().toString().trim();
+                    onCardClickListner.OnCardClickedSearch(position, search);
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -193,6 +207,7 @@ public class AdapterEntrega extends RecyclerView.Adapter<AdapterEntrega.ViewHold
     public interface OnCardClickListner {
         void OnCardClicked(View view, int position);
         void OnCardClickedFecha(int position);
+        void OnCardClickedSearch(int position, String search);
     }
 
 }

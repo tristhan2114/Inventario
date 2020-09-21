@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.denisse.implemento.Fragment.Reportes.ReporteStockFragment;
 import com.denisse.implemento.R;
 import com.denisse.implemento.Fragment.Empleado.EmpleadoCreateFragment;
 import com.denisse.implemento.Fragment.Implementos.InventarioCreateFragment;
@@ -57,6 +58,10 @@ public class DetailActivity extends AppCompatActivity {
                 inventarioCreateFragment.setArguments(bundle);
 
                 ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), inventarioCreateFragment);
+
+                break;
+            case "repote_stock":
+                ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), new ReporteStockFragment());
 
                 break;
             default:

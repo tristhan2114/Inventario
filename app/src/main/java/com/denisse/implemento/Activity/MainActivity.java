@@ -29,6 +29,15 @@ public class MainActivity extends AppCompatActivity {
      https://dribbble.com/shots/5666659-Stor-Mobile-App-UX-UI-Design-and-Branding?utm_source=Pinterest_Shot&utm_campaign=sergiikova&utm_content=Stor+%7C+Mobile+App+UX%2FUI+Design+and+Branding&utm_medium=Social_Share
 
      https://www.pinterest.com/pin/779333910499570251/
+
+     Los reportes que muestra son
+     Reporte stock inventario existente cada ítem registrado  con la cantidad que tiene (archivo) ok---
+
+     Reporte de entreha por área, gráficoestadístico donde muestre área y cantidad
+
+     Reporte de entreha por departamento gráfico estadístico donde muestre departamento y cantidad
+
+     Reporte de entrega por reposiciones que son de tres tipos. Gráfico estadístico donde muestre área y motivo
      */
 
     @Override

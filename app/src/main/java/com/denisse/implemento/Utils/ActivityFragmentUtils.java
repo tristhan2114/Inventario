@@ -37,13 +37,19 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class ActivityFragmentUtils {
+
+    public static Locale localeDefault = new Locale("es", "ES");
+    public static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", localeDefault);
+    public static TimeZone timeZoneDefault = TimeZone.getTimeZone("EST");
 
     // inicio carga fragmento
     public static void changeFragment(boolean isBack, FragmentManager fragmentManager, Fragment fragment){
@@ -285,5 +291,12 @@ public class ActivityFragmentUtils {
     public static String getTimeOnly(long time) {
         SimpleDateFormat sample = new SimpleDateFormat("hh:mma", Locale.getDefault());
         return sample.format(time);
+    }
+
+    public static String getDateNowStr() {
+        Calendar calendarNow = Calendar.getInstance();
+        calendarNow.setTimeZone(timeZoneDefault);
+        Date date = calendarNow.getTime();
+        return dateFormat.format(date);
     }
 }
