@@ -12,14 +12,16 @@ public class EntregaItem implements Serializable {
     private Boolean nuevo;
     private Boolean reposicion;
     private String motivo_cambio;
+    private int cantidad;
 
-    public EntregaItem(String fecha, String talla, String descripcion, Boolean nuevo, Boolean reposicion, String motivo_cambio) {
+    public EntregaItem(String fecha, String talla, String descripcion, Boolean nuevo, Boolean reposicion, String motivo_cambio, int cantidad) {
         this.fecha = fecha;
         this.talla = talla;
         this.descripcion = descripcion;
         this.nuevo = nuevo;
         this.reposicion = reposicion;
         this.motivo_cambio = motivo_cambio;
+        this.cantidad = cantidad;
     }
 
     public EntregaItem() {
@@ -52,24 +54,6 @@ public class EntregaItem implements Serializable {
         this.descripcion = descripcion;
     }
 
-    @PropertyName("nuevo")
-    public Boolean isNuevo() {
-        return nuevo;
-    }
-
-    public void setNuevo(Boolean nuevo) {
-        this.nuevo = nuevo;
-    }
-
-    @PropertyName("recepcion")
-    public Boolean isReposicion() {
-        return reposicion;
-    }
-
-    public void setReposicion(Boolean reposicion) {
-        this.reposicion = reposicion;
-    }
-
     @PropertyName("motivo_cambio")
     public String getMotivo_cambio() {
         return motivo_cambio;
@@ -77,6 +61,33 @@ public class EntregaItem implements Serializable {
 
     public void setMotivo_cambio(String motivo_cambio) {
         this.motivo_cambio = motivo_cambio;
+    }
+
+    @PropertyName("nuevo")
+    public Boolean getNuevo() {
+        return nuevo;
+    }
+
+    public void setNuevo(Boolean nuevo) {
+        this.nuevo = nuevo;
+    }
+
+    @PropertyName("reposicion")
+    public Boolean getReposicion() {
+        return reposicion;
+    }
+
+    public void setReposicion(Boolean reposicion) {
+        this.reposicion = reposicion;
+    }
+
+    @PropertyName("cantidad")
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     @Override
@@ -87,6 +98,7 @@ public class EntregaItem implements Serializable {
                 ", descripcion='" + descripcion + '\'' +
                 ", nuevo=" + nuevo +
                 ", reposicion=" + reposicion +
+                ", cantidad=" + cantidad +
                 ", motivo_cambio='" + motivo_cambio + '\'' +
                 '}';
     }

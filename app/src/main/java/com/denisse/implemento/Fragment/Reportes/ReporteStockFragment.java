@@ -3,63 +3,60 @@ package com.denisse.implemento.Fragment.Reportes;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.denisse.implemento.Activity.DetailActivity;
+import com.denisse.implemento.Adapter.AdapterInventario;
+import com.denisse.implemento.Adapter.AdapterReporteStock;
 import com.denisse.implemento.Model.Implemento;
 import com.denisse.implemento.R;
 import com.denisse.implemento.Utils.ActivityFragmentUtils;
 import com.denisse.implemento.Utils.ImplementoUtils.FirebaseImplemento;
-import com.denisse.implemento.Utils.SharedData;
+import com.denisse.implemento.Utils.ImplementosOp.AdministracionOp;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
-import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.Column;
-import lecho.lib.hellocharts.model.ColumnChartData;
-import lecho.lib.hellocharts.model.SubcolumnValue;
-import lecho.lib.hellocharts.util.ChartUtils;
-import lecho.lib.hellocharts.view.ColumnChartView;
 
 public class ReporteStockFragment extends Fragment {
 
     private Context context;
     private View view;
 
-    // toolbar
     private ImageButton btnBack;
-    private EditText txtSearch;
     private ImageView img_main;
-    private Button btnSearch;
-    private TextView lblTileToolBar, lblHome;
-    private SharedPreferences sharedPreferences;
 
-    private ColumnChartView chart;
-    private ColumnChartData data;
-    private List<Column> columns;
-    List<SubcolumnValue> values;
-    SwipeRefreshLayout refresh;
+    private LinearLayout lyError, lyData;
+    private SwipeRefreshLayout refresh;
+    private TextView lblError;
+    private EditText txtSearch;
+    private Button btnSearch;
+
+    private CardView btnAdd;
+    private RecyclerView rv_inventario;
+
+    private AdapterReporteStock adapterInventario;
 
     public ReporteStockFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,65 +66,110 @@ public class ReporteStockFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_reporte_detail, container, false);
+        view = inflater.inflate(R.layout.fragment_inventario_list, container, false);
         context = getActivity();
-        sharedPreferences = context.getSharedPreferences(SharedData.KEYPREFERENCES, Context.MODE_PRIVATE);
-        initToobar();
+        initializeToolbar();
         startWidgets();
+        getListInvetario();
         return view;
     }
 
-    private void initToobar() {
-        lblHome = view.findViewById(R.id.lblHome);
-        lblTileToolBar = view.findViewById(R.id.lblTileToolBar);
-        lblTileToolBar = view.findViewById(R.id.lblTileToolBar);
+    private void initializeToolbar() {
         btnSearch = view.findViewById(R.id.btnSearch);
-        img_main = view.findViewById(R.id.img_main);
         txtSearch = view.findViewById(R.id.txtSearch);
-        btnBack = view.findViewById(R.id.btnBack);
-        btnBack.setVisibility(View.GONE);
-        txtSearch.setVisibility(View.GONE);
-        img_main.setVisibility(View.GONE);
+        txtSearch.setHint("Código");
         btnSearch.setVisibility(View.GONE);
-        lblTileToolBar.setVisibility(View.VISIBLE);
-        lblTileToolBar.setText("");
-        lblTileToolBar.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        img_main = view.findViewById(R.id.img_main);
+        btnBack = view.findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
+        img_main.setVisibility(View.GONE);
+        txtSearch.setVisibility(View.GONE);
 
-        String user = (SharedData.getKey(context, SharedData.NAME_USER)!=null)?SharedData.getKey(context, SharedData.NAME_USER) : "";
-        lblHome.setText("Bienvenido, "+ user);
-        lblHome.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        txtSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchAction();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchAction();
+            }
+        });
     }
 
     private void startWidgets() {
-        refresh = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
-        chart = (ColumnChartView) view.findViewById(R.id.chart);
-        chart.setOnValueTouchListener(new ValueTouchListener());
+        refresh = view.findViewById(R.id.refresh);
+        rv_inventario = view.findViewById(R.id.rv_inventario);
+        lyData = view.findViewById(R.id.lyData);
+        lyError = view.findViewById(R.id.lyError);
+        lblError = view.findViewById(R.id.lblError);
+        btnAdd = view.findViewById(R.id.btnAddEmpleado);
 
-        getImplementos();
+        rv_inventario.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        rv_inventario.setHasFixedSize(true);
 
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AdministracionOp.DialogInfService(context);
+            }
+        });
+        btnAdd.setVisibility(View.GONE);
         refresh.setColorSchemeColors(getResources().getColor(R.color.colorPrimary),
                 getResources().getColor(R.color.colorPrimaryDark),
                 getResources().getColor(R.color.colorWhite));
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getImplementos();
+                getListInvetario();
                 refresh.setRefreshing(false);
             }
         });
     }
 
-    void getImplementos() {
+    private void searchAction() {
+        ActivityFragmentUtils.hideTeclado(context, lblError);
+        String search = txtSearch.getText().toString().trim();
+        if (search.isEmpty()){
+            ActivityFragmentUtils.ShowMessage("Debe poner una descripción de búsqueda", context, new ActivityFragmentUtils.onClickDialog() {
+                @Override
+                public void onClickDialog(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+        }else{
+            getListEmpleadoByParams(search);
+        }
+    }
+
+    private void msgError(String msg){
+        lyData.setVisibility(View.GONE);
+        lyError.setVisibility(View.VISIBLE);
+        lblError.setText(msg);
+        lblError.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+    }
+
+    private void getListEmpleadoByParams(String params) {
         if(ActivityFragmentUtils.isConnetionNetwork(context)){
-            FirebaseImplemento.getInventarioReporte(context, new FirebaseImplemento.FbRsImplemento() {
+            FirebaseImplemento.getInventarioByParams(context, params, new FirebaseImplemento.FbRsImplemento() {
                 @Override
                 public void isSuccesError(boolean isSucces, String msg, List<Implemento> implementos) {
-                    Log.e("Error-",".1. "+isSucces+ " .. -  "+msg);
                     if(isSucces){
-                        generateData(implementos);
+                        loadAdapter(implementos);
                     }else{
-                        msgDialogo(msg);
+                        msgError(msg);
                     }
                 }
             });
@@ -136,37 +178,44 @@ public class ReporteStockFragment extends Fragment {
         }
     }
 
-    private void generateData(List<Implemento> implementos) {
-        columns = new ArrayList<Column>();
-        values = new ArrayList<SubcolumnValue>();
-
-        for (Implemento implemento : implementos){
-            SubcolumnValue subcolumnValue = new SubcolumnValue();
-            subcolumnValue.setColor(ChartUtils.pickColor());
-            subcolumnValue.setLabel(implemento.getDescripcion());
-            subcolumnValue.setValue(implemento.getCantidad());
-            values.add(subcolumnValue);
+    private void getListInvetario() {
+        if(ActivityFragmentUtils.isConnetionNetwork(context)){
+            FirebaseImplemento.getInventarios(context, new FirebaseImplemento.FbRsImplemento() {
+                @Override
+                public void isSuccesError(boolean isSucces, String msg, List<Implemento> implementos) {
+                    Log.e("Error-",".1. "+isSucces+ " .. -  "+msg);
+                    if(isSucces){
+                        loadAdapter(implementos);
+                    }else{
+                        msgError(msg);
+                    }
+                }
+            });
+        }else{
+           msgDialogo("Verifica tu conexión a internet");
         }
-        Column column = new Column(values);
-        column.setHasLabels(true);
-        column.setHasLabelsOnlyForSelected(true);
-        columns.add(column);
+    }
 
-        data = new ColumnChartData(columns);
-
-        Axis axisX = new Axis();
-        Axis axisY = new Axis().setHasLines(true);
-        axisX.setName("Implementos");
-        axisY.setName("Cantidad");
-        data.setAxisXBottom(axisX);
-        data.setAxisYLeft(axisY);
-
-        chart.setColumnChartData(data);
-
+    private void loadAdapter(List<Implemento> list) {
+        Log.e("Error-",".5. "+list.toString());
+        adapterInventario = new AdapterReporteStock(context, list, new AdapterReporteStock.OnCardClickListner() {
+            @Override
+            public void OnCardClicked(View view, int position) {
+                /*Implemento item = list.get(position);
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("action","createUpdateInventario");
+                intent.putExtra("name","Actualizar");
+                intent.putExtra("isCreate",false);
+                intent.putExtra("inventarioData", item);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);*/
+            }
+        });
+        rv_inventario.setAdapter(adapterInventario);
     }
 
     private void msgDialogo(String msg){
-        ActivityFragmentUtils.ShowMessageDefault(msg, context, new ActivityFragmentUtils.onClickDialog() {
+        ActivityFragmentUtils.ShowMessage(msg, context, new ActivityFragmentUtils.onClickDialog() {
             @Override
             public void onClickDialog(DialogInterface dialog, int id) {
                 dialog.dismiss();
@@ -174,19 +223,9 @@ public class ReporteStockFragment extends Fragment {
         });
     }
 
-
-    private class ValueTouchListener implements ColumnChartOnValueSelectListener {
-        @Override
-        public void onValueSelected(int columnIndex, int subcolumnIndex, SubcolumnValue value) {
-            //Toast.makeText(getActivity(), "Selected: " + columns.get(0).getValues().get(subcolumnIndex).getLabelAsChars(), Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onValueDeselected() {
-            // TODO Auto-generated method stub
-
-        }
-
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
 }

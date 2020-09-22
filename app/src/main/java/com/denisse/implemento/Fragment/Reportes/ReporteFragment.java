@@ -68,7 +68,6 @@ public class ReporteFragment extends Fragment {
         img_main = view.findViewById(R.id.img_main);
         txtSearch = view.findViewById(R.id.txtSearch);
         btnBack = view.findViewById(R.id.btnBack);
-        btnBack.setVisibility(View.GONE);
         txtSearch.setVisibility(View.GONE);
         img_main.setVisibility(View.GONE);
         btnSearch.setVisibility(View.GONE);
@@ -96,21 +95,27 @@ public class ReporteFragment extends Fragment {
 
         btnRepArea.setOnClickListener(view -> {
             Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra("action", "repote_area");
+            intent.putExtra("action", "repote_");
+            intent.putExtra("titulo", "Reporte por área");
+            intent.putExtra("tipo", "area");
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
 
         btnRepDepart.setOnClickListener(view -> {
             Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra("action", "reporte_departamento");
+            intent.putExtra("action", "repote_");
+            intent.putExtra("titulo", "Reporte por departamento");
+            intent.putExtra("tipo", "departamento");
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
 
         btnRepReposi.setOnClickListener(view -> {
             Intent intent = new Intent(context, DetailActivity.class);
-            intent.putExtra("action", "reporte_reposicion");
+            intent.putExtra("action", "repote_");
+            intent.putExtra("titulo", "Reporte por reposiciones");
+            intent.putExtra("tipo", "reposiciones");
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });

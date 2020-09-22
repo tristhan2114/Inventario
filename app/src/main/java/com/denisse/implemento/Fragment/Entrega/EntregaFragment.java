@@ -193,6 +193,7 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
                                 public void run() {
                                     EntregaItem item = listEntregas.get(position);
                                     item.setDescripcion(implementos.get(0).getDescripcion());
+                                    item.setCantidad(implementos.get(0).getCantidad());
                                     listEntregas.set(position, item);
                                     adapterEntrega.notifyDataSetChanged();
                                 }
@@ -438,10 +439,11 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
 
     private EntregaItem addEntrega1 (){
         EntregaItem item = new EntregaItem();
-        item.setDescripcion("");
+        item.setDescripcion("código");
         item.setFecha("dd/mm/yyy");
         item.setNuevo(false);
         item.setReposicion(false);
+        item.setCantidad(0);
         item.setMotivo_cambio("");
         item.setTalla("");
         return item;

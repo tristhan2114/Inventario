@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //FirebaseEmpleado.auth(this, "proyectotesisapp@gmail.com","proyectotesis1234");
         ActivityFragmentUtils.permisosGaleria(this);
 
         ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), new HomeFragment());
@@ -53,6 +52,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //FirebaseEmpleado.auth(this, "proyectotesisapp@gmail.com","proyectotesis1234");
     }
 }

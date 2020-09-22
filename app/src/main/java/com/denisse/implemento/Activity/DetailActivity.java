@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.denisse.implemento.Fragment.Reportes.ReporteDetailFragment;
 import com.denisse.implemento.Fragment.Reportes.ReporteStockFragment;
 import com.denisse.implemento.R;
 import com.denisse.implemento.Fragment.Empleado.EmpleadoCreateFragment;
@@ -15,7 +16,7 @@ import com.denisse.implemento.Utils.ActivityFragmentUtils;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private String action = "", name = "";
+    private String action = "", name = "", titulo = "", tipo = "";
     private boolean isCreate = false;
     private Empleado empleadoData;
     private Implemento implemento;
@@ -62,6 +63,17 @@ public class DetailActivity extends AppCompatActivity {
                 break;
             case "repote_stock":
                 ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), new ReporteStockFragment());
+
+                break;
+            case "repote_":
+                ReporteDetailFragment reporteDetailFragment = new ReporteDetailFragment();
+                titulo = (String) intent.getSerializableExtra("titulo");
+                tipo = (String) intent.getSerializableExtra("tipo");
+
+                bundle.putSerializable("titulo", titulo);
+                bundle.putSerializable("tipo", tipo);
+                reporteDetailFragment.setArguments(bundle);
+                ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), reporteDetailFragment);
 
                 break;
             default:

@@ -14,7 +14,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -81,55 +80,31 @@ public class FirebaseEntrega {
                 rsEmpleado.isSuccesError(false, "", new ArrayList<>());
             }
         });
-    }
+*/
 
-    public static void checkEmpleadoExit(String cedula, FbRsEntregas rsEmpleado){
-        //loading(context);
-        DatabaseReference reference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
-        Query query = reference.orderByChild("ci").equalTo(cedula).limitToFirst(1);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    rsEmpleado.isSuccesError(true, "", new ArrayList<>());
-                }else{
-                    rsEmpleado.isSuccesError(false, "", new ArrayList<>());
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                rsEmpleado.isSuccesError(false, "", new ArrayList<>());
-            }
-        });
-
-    }
-
-    public static void getEmpleados(Context context, FbRsEntregas rsEmpleado){
+    public static void getEntregas(Context context, FbRsEntregas rsEntregas){
         loading(context);
-        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
+        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_ENTREGAS);
         ValueEventListener eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                progressDialog.dismiss();
                 if (dataSnapshot.exists()) {
                     try {
-                        //Log.e("Error-",".1. "+dataSnapshot.toString());
-                        List<Empleado> empleados = new ArrayList<>();
+                        List<EntregaModel> entregaModels = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            //Log.e("Error-",".2. "+child.toString());
-                            Empleado empleado = child.getValue(Empleado.class);
-                            //Log.e("Error-",".3. "+empleado.toString());
-                            empleados.add(empleado);
+                            EntregaModel entregaModel = child.getValue(EntregaModel.class);
+                            //Log.e("Error-", "dbo "+entregaModel.toString());
+                            entregaModels.add(entregaModel);
                         }
-                        progressDialog.dismiss();
-                        rsEmpleado.isSuccesError(true, "ok", empleados);
+                        rsEntregas.isSuccesError(false, "ok", entregaModels);
                     }catch (Exception e){
-                        //Log.e("Error-",e.getMessage());
-                        progressDialog.dismiss();
-                        rsEmpleado.isSuccesError(false, "No hay Empleados registrados", new ArrayList<>());
+                        Log.e("Error-","catch "+e.getMessage());
+                        rsEntregas.isSuccesError(true, "No hay entregas", new ArrayList<>());
                     }
                 }else {
-                    progressDialog.dismiss();
-                    rsEmpleado.isSuccesError(false, "No hay Empleados registrados", new ArrayList<>());
+                    Log.e("Error-", "oool else");
+                    rsEntregas.isSuccesError(true, "No hay entregas", new ArrayList<>());
                 }
             }
 
@@ -137,12 +112,12 @@ public class FirebaseEntrega {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("Error-dtf", ".- "+databaseError.toString());
                 progressDialog.dismiss();
-                rsEmpleado.isSuccesError(false, "No hay Imventario registrados e-database", new ArrayList<>());
+                rsEntregas.isSuccesError(true, "No hay entregas e-database", new ArrayList<>());
             }
         });
         databaseReference.addValueEventListener(eventListener);
     }
-*/
+
     public static void createEntrega(Context context, EntregaModel entregaModel, FbRsEntregas rsEmpleado){
         loading(context);
         DatabaseReference databaseReference = getmDatabaseReferenceSave();

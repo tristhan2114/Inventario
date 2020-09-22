@@ -52,7 +52,7 @@ public class EntregaModel implements Serializable {
         this.tipo_entrega = tipo_entrega;
     }
 
-    @PropertyName("empleado")
+        @PropertyName("empleado")
     public Empleado getEmpleado() {
         return empleado;
     }
@@ -95,6 +95,19 @@ public class EntregaModel implements Serializable {
 
     public void setFecha_creacion(String fecha_creacion) {
         this.fecha_creacion = fecha_creacion;
+    }
+
+    @Override
+    public String toString() {
+        return "EntregaModel{" +
+                "id='" + id + '\'' +
+                ", tipo_entrega='" + tipo_entrega + '\'' +
+                ", fecha_creacion='" + fecha_creacion + '\'' +
+                ", empleado=" + empleado +
+                ", departamento=" + departamento +
+                ", puesto=" + puesto +
+                ", entregaItems=" + entregaItems +
+                '}';
     }
 
     @Exclude
