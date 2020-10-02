@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.denisse.implemento.Model.Empleado.Empleado;
 import com.denisse.implemento.Model.Entrega.EntregaModel;
+import com.denisse.implemento.Utils.AdministracionOp.FirebaseAdministracion;
 import com.denisse.implemento.Utils.Constantes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,51 +42,11 @@ public class FirebaseEntrega {
         progressDialog.show();
         progressDialog.setCancelable(false);
     }
-/*
-    public static void getEmpleadosByParams(Context context, String params, FbRsEntregas rsEmpleado){
-        loading(context);
-        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
-        Query myTopPostsQuery = databaseReference.orderByChild("ci").equalTo(params);
-        myTopPostsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Log.e("Error-",".0. "+dataSnapshot.toString());
-                if (dataSnapshot.exists()) {
-                    try {
-                        //List<Empleado> empleados = (List<Empleado>) dataSnapshot.getValue(Empleado.class);
-                        //Log.e("Error-",".1. "+dataSnapshot.toString());
-                        List<Empleado> empleados = new ArrayList<>();
-                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            //Log.e("Error-",".2. "+child.toString());
-                            Empleado empleado = child.getValue(Empleado.class);
-                            //Log.e("Error-",".3. "+empleado.toString());
-                            empleados.add(empleado);
-                        }
-                        progressDialog.dismiss();
-                        rsEmpleado.isSuccesError(true, "", empleados);
-                    }catch (Exception e){
-                        Log.e("Error-",e.getMessage());
-                        progressDialog.dismiss();
-                        rsEmpleado.isSuccesError(false, "", new ArrayList<>());
-                    }
-                }else {
-                    progressDialog.dismiss();
-                    rsEmpleado.isSuccesError(false, "", new ArrayList<>());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                progressDialog.dismiss();
-                rsEmpleado.isSuccesError(false, "", new ArrayList<>());
-            }
-        });
-*/
 
     public static void getEntregas(Context context, FbRsEntregas rsEntregas){
         loading(context);
         DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_ENTREGAS);
-        ValueEventListener eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 progressDialog.dismiss();
@@ -94,7 +55,6 @@ public class FirebaseEntrega {
                         List<EntregaModel> entregaModels = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             EntregaModel entregaModel = child.getValue(EntregaModel.class);
-                            //Log.e("Error-", "dbo "+entregaModel.toString());
                             entregaModels.add(entregaModel);
                         }
                         rsEntregas.isSuccesError(false, "ok", entregaModels);
@@ -115,7 +75,6 @@ public class FirebaseEntrega {
                 rsEntregas.isSuccesError(true, "No hay entregas e-database", new ArrayList<>());
             }
         });
-        databaseReference.addValueEventListener(eventListener);
     }
 
     public static void createEntrega(Context context, EntregaModel entregaModel, FbRsEntregas rsEmpleado){
@@ -161,6 +120,22 @@ public class FirebaseEntrega {
     }
 
 */
+
+    public static void deleteImplemento(Context context, String id, FbRsEntregas rsEntregas){
+        loading(context);
+        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_ENTREGAS).child(id);
+        databaseReference.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                progressDialog.dismiss();
+                if(task.isSuccessful()){
+                    rsEntregas.isSuccesError(false, "Elemento eliminado", new ArrayList<>());
+                }else{
+                    rsEntregas.isSuccesError(true, "Error al eliminar elemento", new ArrayList<>());
+                }
+            }
+        });
+    }
 
     public interface FbRsEntregas {
         void isSuccesError(boolean isSucces, String msg, List<EntregaModel> entregaModels);

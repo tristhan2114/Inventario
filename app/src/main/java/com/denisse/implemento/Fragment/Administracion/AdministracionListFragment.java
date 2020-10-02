@@ -37,7 +37,7 @@ public class AdministracionListFragment extends Fragment {
 
     private LinearLayout lyError, lyData;
     private SwipeRefreshLayout refresh;
-    private TextView lblError;
+    private TextView lblError, lblTileToolBar;
     private EditText txtSearch;
     private Button btnSearch;
 
@@ -69,10 +69,13 @@ public class AdministracionListFragment extends Fragment {
     }
 
     private void initializeToolbar() {
+        lblTileToolBar = view.findViewById(R.id.lblTileToolBar);
         btnSearch = view.findViewById(R.id.btnSearch);
         txtSearch = view.findViewById(R.id.txtSearch);
         txtSearch.setHint("Cédula");
         btnSearch.setVisibility(View.GONE);
+        lblTileToolBar.setVisibility(View.VISIBLE);
+        lblTileToolBar.setText("Administración");
         img_main = view.findViewById(R.id.img_main);
         btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new View.OnClickListener() {

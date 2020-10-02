@@ -48,14 +48,80 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
-                    <lecho.lib.hellocharts.view.ColumnChartView
-                        android:id="@+id/chart"
-                        android:layout_marginTop="10dp"
+
+
+                    <LinearLayout
+                        android:id="@+id/lyData"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"/>
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/lblFechaInicial"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="35dp"
+                                    android:minWidth="185dp"
+                                    android:paddingStart="5dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:gravity="center_vertical"
+                                    android:hint="fecha inicial"
+                                    android:background="@drawable/format_edittext"
+                                    android:textSize="17dp"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/lblFechaFin"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="35dp"
+                                    android:minWidth="185dp"
+                                    android:paddingStart="5dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:gravity="center_vertical"
+                                    android:hint="fecha final"
+                                    android:background="@drawable/format_edittext"
+                                    android:textSize="17dp"/>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <lecho.lib.hellocharts.view.ColumnChartView
+                            android:id="@+id/chart"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:visibility="gone"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"/>
+
+                        <lecho.lib.hellocharts.view.LineChartView
+                            android:id="@+id/chart1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

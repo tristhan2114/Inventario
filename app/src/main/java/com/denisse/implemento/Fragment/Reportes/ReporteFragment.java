@@ -72,12 +72,18 @@ public class ReporteFragment extends Fragment {
         img_main.setVisibility(View.GONE);
         btnSearch.setVisibility(View.GONE);
         lblTileToolBar.setVisibility(View.VISIBLE);
-        lblTileToolBar.setText("");
-        lblTileToolBar.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        lblTileToolBar.setText("Reportes");
+        //lblTileToolBar.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 
         String user = (SharedData.getKey(context, SharedData.NAME_USER)!=null)?SharedData.getKey(context, SharedData.NAME_USER) : "";
         lblHome.setText("Bienvenido, "+ user);
         lblHome.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
     }
 
     private void startWidgets() {

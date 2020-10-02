@@ -35,7 +35,7 @@ public class InventarioCreateFragment extends Fragment implements DatePickerCall
     private ImageButton btnBack;
     private ImageView img_main;
     private Button btnSearch;
-    private TextView lblActionBtn, txtFechRegistro;
+    private TextView lblActionBtn, txtFechRegistro, lblTileToolBar;
 
     private EditText txtSearch, txtCodigo, txtDescripcion, txtColor, txtVidaUtil, txtCantidad, txtTalla;
     private CardView btnAddEmpleado;
@@ -78,7 +78,10 @@ public class InventarioCreateFragment extends Fragment implements DatePickerCall
         });
         btnSearch.setVisibility(View.GONE);
         txtSearch.setVisibility(View.GONE);
-        img_main.setVisibility(View.VISIBLE);
+        img_main.setVisibility(View.GONE);
+        lblTileToolBar = view.findViewById(R.id.lblTileToolBar);
+        lblTileToolBar.setVisibility(View.VISIBLE);
+        lblTileToolBar.setText("Actualizar Implemento");
     }
 
     private void startWidgets() {

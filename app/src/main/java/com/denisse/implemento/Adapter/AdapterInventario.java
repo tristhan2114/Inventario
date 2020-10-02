@@ -1,15 +1,22 @@
 package com.denisse.implemento.Adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.denisse.implemento.Model.Administracion;
+import com.denisse.implemento.Model.Entrega.EntregaModel;
 import com.denisse.implemento.R;
 import com.denisse.implemento.Model.Implemento;
+import com.denisse.implemento.Utils.ActivityFragmentUtils;
+import com.denisse.implemento.Utils.AdministracionOp.FirebaseAdministracion;
+import com.denisse.implemento.Utils.EntregaUtils.FirebaseEntrega;
 
 import java.util.List;
 
@@ -46,6 +53,28 @@ public class AdapterInventario extends RecyclerView.Adapter<AdapterInventario.Vi
                 onCardClickListner.OnCardClicked(v, position);
             }
         });
+
+        holder.lyEliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityFragmentUtils.ShowMessageDefault("¿Está seguro de eliminar elemento", context, new ActivityFragmentUtils.onClickDialog() {
+                    @Override
+                    public void onClickDialog(DialogInterface dialog, int id) {
+                        FirebaseEntrega.deleteImplemento(context, item.getId(), new FirebaseEntrega.FbRsEntregas() {
+                            @Override
+                            public void isSuccesError(boolean isSucces, String msg, List<EntregaModel> entregaModels) {
+                                ActivityFragmentUtils.ShowMessageDefault(msg, context, new ActivityFragmentUtils.onClickDialog() {
+                                    @Override
+                                    public void onClickDialog(DialogInterface dialog, int id) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -55,12 +84,14 @@ public class AdapterInventario extends RecyclerView.Adapter<AdapterInventario.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView lblCodigo, lblArea, lblDescripcion;
+        LinearLayout lyEliminar;
 
         public ViewHolder(View v) {
             super(v);
             lblCodigo = v.findViewById(R.id.lblCodigo);
             lblArea = v.findViewById(R.id.lblArea);
             lblDescripcion = v.findViewById(R.id.lblDescripcion);
+            lyEliminar = v.findViewById(R.id.lyEliminar);
         }
     }
 

@@ -41,6 +41,7 @@ public class ReporteStockFragment extends Fragment {
 
     private ImageButton btnBack;
     private ImageView img_main;
+    private TextView lblTileToolBar;
 
     private LinearLayout lyError, lyData;
     private SwipeRefreshLayout refresh;
@@ -75,10 +76,13 @@ public class ReporteStockFragment extends Fragment {
     }
 
     private void initializeToolbar() {
+        lblTileToolBar = view.findViewById(R.id.lblTileToolBar);
         btnSearch = view.findViewById(R.id.btnSearch);
         txtSearch = view.findViewById(R.id.txtSearch);
         txtSearch.setHint("Código");
         btnSearch.setVisibility(View.GONE);
+        lblTileToolBar.setVisibility(View.VISIBLE);
+        lblTileToolBar.setText("Reporte Stock");
         img_main = view.findViewById(R.id.img_main);
         btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new View.OnClickListener() {

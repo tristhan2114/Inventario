@@ -25,53 +25,21 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:gravity="center_horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:textColor="@color/colorBlack"
                 android:text="Entrega de implemtos"
                 android:textStyle="bold"
                 android:textSize="16dp"/>
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardDepartamento"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="3dp"
-                    android:layout_marginStart="7dp"
-                    app:cardBackgroundColor="@color/md_light_blue_500"
-                    app:cardElevation="5dp"
-                    android:layout_gravity="center"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="7dp"
-                        android:layout_marginEnd="7dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:layout_gravity="center">
-
-                        <TextView
-                            android:id="@+id/lblCardDepartamento"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="18dp"
-                            android:textColor="@color/colorWhite"
-                            android:text="Departamento"/>
-
-                    </LinearLayout>
-
-
-                </android.support.v7.widget.CardView>
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -82,32 +50,30 @@
                     android:layout_weight="1">
 
                     <android.support.v7.widget.CardView
-                        android:id="@+id/cardArea"
+                        android:id="@+id/cardDepartamento"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:minWidth="150dp"
                         app:cardCornerRadius="3dp"
                         android:layout_marginStart="7dp"
-                        app:cardBackgroundColor="@color/colorBlackDark"
+                        app:cardBackgroundColor="@color/md_light_blue_500"
                         app:cardElevation="5dp"
-                        app:cardUseCompatPadding="true">
+                        android:layout_gravity="center">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="7dp"
                             android:layout_marginEnd="7dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginBottom="3dp"
                             android:layout_gravity="center">
 
                             <TextView
-                                android:id="@+id/lblCardArea"
+                                android:id="@+id/lblCardDepartamento"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:padding="2dp"
                                 android:textSize="18dp"
                                 android:textColor="@color/colorWhite"
-                                android:text="Área"/>
+                                android:text="Departamento"/>
 
                         </LinearLayout>
 
@@ -131,8 +97,78 @@
                         app:cardCornerRadius="3dp"
                         android:layout_marginStart="7dp"
                         app:cardBackgroundColor="@color/colorBlackDark"
-                        app:cardElevation="5dp"
-                        app:cardUseCompatPadding="true">
+                        app:cardElevation="5dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
+                            android:layout_marginEnd="7dp"
+                            android:layout_gravity="center">
+
+                            <TextView
+                                android:id="@+id/lblCardEmpleado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:textSize="18dp"
+                                android:textColor="@color/colorWhite"
+                                android:text="Empleado"/>
+
+                        </LinearLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/lblFecha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:minWidth="185dp"
+                        android:paddingStart="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:hint="fecha de entrega"
+                        android:background="@drawable/format_edittext"
+                        android:textSize="17dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cardArea"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="150dp"
+                        app:cardCornerRadius="3dp"
+                        android:layout_marginStart="7dp"
+                        app:cardBackgroundColor="@color/colorBlackDark"
+                        app:cardElevation="5dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -144,12 +180,13 @@
                             android:layout_gravity="center">
 
                             <TextView
-                                android:id="@+id/lblCardEmpleado"
+                                android:id="@+id/lblCardArea"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:padding="2dp"
                                 android:textSize="18dp"
                                 android:textColor="@color/colorWhite"
-                                android:text="Empleado"/>
+                                android:text="Área"/>
 
                         </LinearLayout>
 
@@ -164,6 +201,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="10dp"
                 android:background="@color/md_grey_300"/>
 
@@ -352,46 +390,71 @@
                 android:layout_marginEnd="10dp"
                 android:background="@color/md_grey_300"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:textColor="@color/colorBlack"
-                android:text="Detalle"
-                android:textSize="16dp"/>
+                android:orientation="horizontal">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/btnAddRv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="3dp"
-                android:layout_marginStart="7dp"
-                app:cardBackgroundColor="@color/md_light_blue_500"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true">
-
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="7dp"
-                    android:layout_marginEnd="7dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_gravity="center">
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    android:text="Agregue implementos"
+                    android:textSize="18dp"/>
 
-                    <TextView
+                <android.support.v7.widget.CardView
+                    android:id="@+id/btnAddRv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="3dp"
+                    android:layout_marginStart="7dp"
+                    app:cardBackgroundColor="@color/md_light_blue_500"
+                    app:cardElevation="5dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18dp"
-                        android:textColor="@color/colorWhite"
-                        android:text="Agregar"/>
+                        android:layout_marginStart="7dp"
+                        android:layout_marginEnd="7dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_gravity="center">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18dp"
+                            android:textColor="@color/colorWhite"
+                            android:text="Agregar"/>
 
+                    </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+            <include
+                layout="@layout/row_item_entrega"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:text="Lista de implementos a entregar"
+                android:textSize="18dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,8 @@ public class HomeFragment extends Fragment {
                     break;
                 case Constantes.ROL_ASISTENTE:
                     btnAdministracion.setVisibility(View.GONE);
+                    btnRegistrarEntregas.setVisibility(View.GONE);
+                    btnRegistrarReportes.setVisibility(View.GONE);
                     btnRegistrarInventario.setVisibility(View.VISIBLE);
                     btnRegistrarEmpleado.setVisibility(View.VISIBLE);
 
@@ -104,8 +107,10 @@ public class HomeFragment extends Fragment {
         img_main.setVisibility(View.GONE);
         btnSearch.setVisibility(View.GONE);
         lblTileToolBar.setVisibility(View.VISIBLE);
-        lblTileToolBar.setText("");
-        lblTileToolBar.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        lblTileToolBar.setText("Menú Principal");
+        lblTileToolBar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        lblTileToolBar.setGravity(Gravity.CENTER);
+        lblTileToolBar.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 19);
 
         String user = (SharedData.getKey(context, SharedData.NAME_USER)!=null)?SharedData.getKey(context, SharedData.NAME_USER) : "";
         lblHome.setText("Bienvenido, "+ user);

@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 public class EntregaItem implements Serializable {
 
-    private String fecha;
     private String talla;
     private String descripcion;
     private Boolean nuevo;
@@ -14,8 +13,7 @@ public class EntregaItem implements Serializable {
     private String motivo_cambio;
     private int cantidad;
 
-    public EntregaItem(String fecha, String talla, String descripcion, Boolean nuevo, Boolean reposicion, String motivo_cambio, int cantidad) {
-        this.fecha = fecha;
+    public EntregaItem(String talla, String descripcion, Boolean nuevo, Boolean reposicion, String motivo_cambio, int cantidad) {
         this.talla = talla;
         this.descripcion = descripcion;
         this.nuevo = nuevo;
@@ -25,15 +23,6 @@ public class EntregaItem implements Serializable {
     }
 
     public EntregaItem() {
-    }
-
-    @PropertyName("fecha")
-    public String getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
     }
 
     @PropertyName("talla")
@@ -93,7 +82,6 @@ public class EntregaItem implements Serializable {
     @Override
     public String toString() {
         return "EntregaItem{" +
-                "fecha='" + fecha + '\'' +
                 ", talla='" + talla + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", nuevo=" + nuevo +

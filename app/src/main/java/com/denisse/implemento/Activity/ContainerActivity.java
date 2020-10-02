@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.denisse.implemento.Fragment.Empleado.EmpleadoListFragment;
 import com.denisse.implemento.Fragment.Entrega.EntregaFragment;
+import com.denisse.implemento.Fragment.Entrega.EntregaListFragment;
 import com.denisse.implemento.Fragment.Reportes.ReporteFragment;
 import com.denisse.implemento.R;
 import com.denisse.implemento.Fragment.Administracion.AdministracionListFragment;
@@ -38,7 +39,7 @@ public class ContainerActivity extends AppCompatActivity {
                 ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), new AdministracionListFragment());
                 break;
                 case "Entrega":
-                ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), new EntregaFragment());
+                ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), new EntregaListFragment());
                 break;
             case "reporte":
                 ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), new ReporteFragment());

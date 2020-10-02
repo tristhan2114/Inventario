@@ -1,5 +1,6 @@
 package com.denisse.implemento.Fragment.Empleado;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,9 +10,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -72,6 +75,7 @@ public class EmpleadoListFragment extends Fragment {
         return view;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initializeToolbar() {
         btnSearch = view.findViewById(R.id.btnSearch);
         txtSearch = view.findViewById(R.id.txtSearch);
@@ -93,6 +97,23 @@ public class EmpleadoListFragment extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     searchAction();
                     return true;
+                }
+                return false;
+            }
+        });
+
+            txtSearch.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if(txtSearch.getText().toString().isEmpty()){
+                        ActivityFragmentUtils.ShowMessageDefault("Parámetro de búsqueda<br>Cédula (ced:)<br>Apellido (ape:)", context, new ActivityFragmentUtils.onClickDialog() {
+                            @Override
+                            public void onClickDialog(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
                 }
                 return false;
             }
@@ -146,15 +167,19 @@ public class EmpleadoListFragment extends Fragment {
         ActivityFragmentUtils.hideTeclado(context, lblError);
         String search = txtSearch.getText().toString().trim();
         if (search.isEmpty()){
-            ActivityFragmentUtils.ShowMessage("Debe poner una descripción de búsqueda", context, new ActivityFragmentUtils.onClickDialog() {
-                @Override
-                public void onClickDialog(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-                }
-            });
+            dlgMsg("Debe poner una descripción de búsqueda");
         }else{
             getListEmpleadoByParams(search);
         }
+    }
+
+    private void dlgMsg(String msg) {
+        ActivityFragmentUtils.ShowMessage(msg, context, new ActivityFragmentUtils.onClickDialog() {
+            @Override
+            public void onClickDialog(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private void msgError(String msg){
@@ -164,12 +189,26 @@ public class EmpleadoListFragment extends Fragment {
         lblError.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
     }
 
-    private void getListEmpleadoByParams(String params) {
+    private void getListEmpleadoByParams(String search) {
+        String params = "";
+        if(search.contains("ced:")){
+            params = "ci";
+            search = search.replace("ced:", "");
+        }else if (search.contains("ape:")){
+            params = "apellidos";
+            search = search.replace("ape:", "");
+            search = search.replace(" ", "");
+            search = search.toUpperCase();
+        }else {
+            dlgMsg("Parámetro de búsqueda no encontrada");
+            return;
+        }
         if(ActivityFragmentUtils.isConnetionNetwork(context)){
-            FirebaseEmpleado.getEmpleadosByParams(context, params, new FirebaseEmpleado.FbRsEmpleado() {
+            FirebaseEmpleado.getEmpleadosByParamsSearch(context, params, search, new FirebaseEmpleado.FbRsEmpleado() {
                 @Override
                 public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
                     if(isSucces){
+                        Log.e("Error-klk", ".,ñ "+isSucces);
                         loadAdapter(empleados);
                     }else{
                         msgError(msg);

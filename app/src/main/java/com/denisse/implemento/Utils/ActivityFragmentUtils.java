@@ -49,6 +49,7 @@ public class ActivityFragmentUtils {
 
     public static Locale localeDefault = new Locale("es", "ES");
     public static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", localeDefault);
+    public static DateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", localeDefault);
     public static TimeZone timeZoneDefault = TimeZone.getTimeZone("EST");
 
     // inicio carga fragmento
@@ -299,4 +300,57 @@ public class ActivityFragmentUtils {
         Date date = calendarNow.getTime();
         return dateFormat.format(date);
     }
+
+    public static String getDateNowFB1() {
+        Calendar calendarNow = Calendar.getInstance();
+        calendarNow.setTimeZone(timeZoneDefault);
+        Date date = new Date();
+        calendarNow.setTime(date);
+        return dateFormat1.format(calendarNow.getTime());
+    }
+
+    public static Date getDateNow() {
+        Calendar calendarNow = Calendar.getInstance();
+        calendarNow.setTimeZone(timeZoneDefault);
+        Date today = calendarNow.getTime();
+        return today;
+    }
+
+    public static String getDayNameNumber(String fecha, String opcion) {
+        String date_ = "";
+        String fechaS[] = fecha.split("/");
+
+        int dia = Integer.parseInt(fechaS[0]);
+        int mes = Integer.parseInt(fechaS[1]);
+        int anio = Integer.parseInt(fechaS[2]);
+
+        if (opcion.equals("day_number")) {
+            date_ = fechaS[0];
+        }
+        if (opcion.equals("Month")) {
+            SimpleDateFormat outFormat = new SimpleDateFormat("MMMM", localeDefault);
+            outFormat.setTimeZone(timeZoneDefault);
+            Date date = new Date(anio, (mes - 1), dia - 1);
+            date_ = outFormat.format(date);
+        }
+        if (opcion.equals("day_name")) {
+            SimpleDateFormat outFormat = new SimpleDateFormat("EEEE", localeDefault);
+            outFormat.setTimeZone(timeZoneDefault);
+            Date date = new Date(anio, (mes - 1), dia - 1);
+            date_ = outFormat.format(date);
+        }
+        if (opcion.equals("years")) {
+            date_ = fechaS[2];
+        }
+        return date_;
+    }
+
+    public static String ucFirst(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        } else {
+            return str.substring(0, 1).toUpperCase() + str.substring(1);
+        }
+    }
+
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.denisse.implemento.Fragment.Entrega.EntregaFragment;
 import com.denisse.implemento.Fragment.Reportes.ReporteDetailFragment;
 import com.denisse.implemento.Fragment.Reportes.ReporteStockFragment;
 import com.denisse.implemento.R;
@@ -75,6 +76,9 @@ public class DetailActivity extends AppCompatActivity {
                 reporteDetailFragment.setArguments(bundle);
                 ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), reporteDetailFragment);
 
+                break;
+            case "createEntrega":
+                ActivityFragmentUtils.changeFragment(false, getSupportFragmentManager(), new EntregaFragment());
                 break;
             default:
 

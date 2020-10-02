@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -42,7 +43,7 @@ public class EmpleadoCreateFragment extends Fragment {
     private ImageButton btnBack;
     private ImageView img_main, img_empleado, btnChangeImg;
     private Button btnSearch;
-    private TextView lblActionBtn;
+    private TextView lblActionBtn, lblTileToolBar;
     private CardView btnAddEmpleado;
 
     private Spinner sp_genero, sp_area, sp_jornada, sp_Puesto;
@@ -88,9 +89,10 @@ public class EmpleadoCreateFragment extends Fragment {
 
         switch (name){
             case "Guardar":
-
+                lblTileToolBar.setText("Crear Empleado");
                 break;
             case "Actualizar":
+                lblTileToolBar.setText("Actualizar empleado");
                 isSpinner = true;
                 empleadoData = (Empleado) bundle.getSerializable("empleadoData");
                 Log.e("Error-","..- "+empleadoData.toString());
@@ -140,6 +142,7 @@ public class EmpleadoCreateFragment extends Fragment {
     }
 
     private void initializeToolbar() {
+        lblTileToolBar = view.findViewById(R.id.lblTileToolBar);
         btnSearch = view.findViewById(R.id.btnSearch);
         txtSearch = view.findViewById(R.id.txtSearch);
         img_main = view.findViewById(R.id.img_main);
@@ -152,7 +155,8 @@ public class EmpleadoCreateFragment extends Fragment {
         });
         btnSearch.setVisibility(View.GONE);
         txtSearch.setVisibility(View.GONE);
-        img_main.setVisibility(View.VISIBLE);
+        img_main.setVisibility(View.GONE);
+        lblTileToolBar.setVisibility(View.VISIBLE);
     }
 
     private void startWidgets() {
@@ -268,6 +272,16 @@ public class EmpleadoCreateFragment extends Fragment {
     }
 
     private void onActionClisListener(){
+        cbStarus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!cbStarus.isChecked()) {
+                    validateStatusEmpleado("Al descmarcar la casilla va a desabilitar al empleado", false);
+                }
+                cbStarus.setChecked(true);
+            }
+        });
+
         btnChangeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -339,6 +353,15 @@ public class EmpleadoCreateFragment extends Fragment {
                         }
                     });
                 }
+            }
+        });
+    }
+
+    void validateStatusEmpleado(String msg, boolean isChecked){
+        ActivityFragmentUtils.ShowMessage(msg, context, new ActivityFragmentUtils.onClickDialog() {
+            @Override
+            public void onClickDialog(DialogInterface dialog, int id) {
+                cbStarus.setChecked(isChecked);
             }
         });
     }

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp">
 
@@ -72,18 +72,20 @@
             <TextView
                 android:id="@+id/lblTileToolBar"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
+                android:gravity="center"
                 android:layout_marginLeft="5dp"
                 android:paddingTop="5px"
                 android:paddingBottom="5px"
                 android:visibility="gone"
-                android:text=""
+                android:text="Reporte"
                 android:singleLine="true"
                 android:maxLines="1"
-                android:textAlignment="center"
-                android:layout_marginRight="35dp"/>
+                android:textSize="18dp"
+                android:textColor="@color/colorWhite"
+                android:textAlignment="textStart"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:src="@mipmap/search"

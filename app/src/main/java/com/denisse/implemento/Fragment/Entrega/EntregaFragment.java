@@ -8,7 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -42,6 +46,7 @@ import com.fastaccess.datetimepicker.callback.TimePickerCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class EntregaFragment extends Fragment implements DatePickerCallback, TimePickerCallback {
 
@@ -56,7 +61,7 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
     private EditText txtSearch, txtCedula;
     private LinearLayout lyData, lyError;
     private LinearLayout lyEmpleado, lyRsEmpleado, lyDepartamento, lyArea;
-    private TextView lblNames, lblDepartamento, lblArea, lblFechIngreso, lblError;
+    private TextView lblNames, lblDepartamento, lblArea, lblFechIngreso, lblError, lblFecha, lblTileToolBar;
     private TextView lblCardDepartamento, lblCardArea, lblCardEmpleado;
     private Spinner sp_departamento, sp_area;
 
@@ -70,7 +75,22 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
 
     private int positionFecha = 0;
     private Handler handler = new Handler();
+    private long time_fecha_entrega = 0;
 
+
+    //todo Inicio: para proceso de agregacion de implementos de entrega
+    // inicio view
+    EditText txtDescripcion, txtObservacion, txtTalla, txtCantidad;
+    ImageView ImgEliminar;
+    CheckBox cbReposicion, cbNuevo;
+    LinearLayout lyCambio;
+    // fin view
+
+
+
+    int cantidadAux = 0;
+
+    //todo Fin: para proceso de agregacion de implementos de entrega
 
     public EntregaFragment() {
         // Required empty public constructor
@@ -93,6 +113,7 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
     }
 
     private void initializeToolbar() {
+        lblTileToolBar = view.findViewById(R.id.lblTileToolBar);
         btnSearch = view.findViewById(R.id.btnSearch);
         txtSearch = view.findViewById(R.id.txtSearch);
         img_main = view.findViewById(R.id.img_main);
@@ -105,10 +126,13 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
         });
         btnSearch.setVisibility(View.GONE);
         txtSearch.setVisibility(View.GONE);
-        img_main.setVisibility(View.VISIBLE);
+        img_main.setVisibility(View.GONE);
+        lblTileToolBar.setVisibility(View.VISIBLE);
+        lblTileToolBar.setText("Entrega de implementos");
     }
 
     private void startWidgets() {
+        lblFecha = view.findViewById(R.id.lblFecha);
         txtCedula = view.findViewById(R.id.txtCedula);
         lyData = view.findViewById(R.id.lyData);
         lyError = view.findViewById(R.id.lyError);
@@ -132,41 +156,107 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
         lyArea = view.findViewById(R.id.lyArea);
         sp_area = view.findViewById(R.id.sp_area);
 
+        //todo: inicio componetes add entrega
+        txtDescripcion = view.findViewById(R.id.txtDescripcion);
+        txtObservacion = view.findViewById(R.id.txtObservacion);
+        txtTalla = view.findViewById(R.id.txtTalla);
+        txtCantidad = view.findViewById(R.id.txtCantidad);
+        ImgEliminar = view.findViewById(R.id.ImgEliminar);
+        cbReposicion = view.findViewById(R.id.cbReposicion);
+        cbNuevo = view.findViewById(R.id.cbNuevo);
+        lyCambio = view.findViewById(R.id.lyCambio);
+
+        //todo: fin componetes add entrega
+
+
         isDepartamento = true;
         rvEntrega = view.findViewById(R.id.rvEntrega);
         rvEntrega.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         rvEntrega.setHasFixedSize(true);
         adapterEntrega = new AdapterEntrega(context, listEntregas, new AdapterEntrega.OnCardClickListner() {
             @Override
-            public void OnCardClicked(View view, int position) {
+            public void OnCardClicked(int position) {
 
-            }
-
-            @Override
-            public void OnCardClickedFecha(int position) {
-                positionFecha = position;
-                try {
-                    DatePickerFragmentDialog.newInstance(DateTimeBuilder.newInstance()
-                            .withMinDate(ActivityFragmentUtils.minDate().getTimeInMillis())
-                            .withMaxDate(ActivityFragmentUtils.maxDate().getTimeInMillis()))
-                            .show(getChildFragmentManager(), "DatePickerFragmentDialog");
-                }catch (Exception e){
-                    Log.e("Error-jj", e.getMessage());
-                }
-            }
-
-            @Override
-            public void OnCardClickedSearch(int position, String search) {
-                buscarCodigoImplemento(position, search);
             }
         });
         rvEntrega.setAdapter(adapterEntrega);
 
         loadSpinner();
+        processAddEntrega();
 
     }
 
-    private void buscarCodigoImplemento(int position, String search) {
+    private void processAddEntrega() {
+        cbNuevo.setChecked(true);
+        cbReposicion.setChecked(false);
+        cbNuevo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cbNuevo.setChecked(true);
+                cbReposicion.setChecked(false);
+                lyCambio.setVisibility(View.GONE);
+                txtObservacion.setText("");
+            }
+        });
+
+        cbReposicion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cbReposicion.setChecked(true);
+                cbNuevo.setChecked(false);
+                lyCambio.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // buscar
+        txtDescripcion.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String search = txtDescripcion.getText().toString().trim();
+                    buscarCodigoImplemento(search);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        // cantidad
+        txtCantidad.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (Pattern.compile("[0-9]").matcher(txtCantidad.getText().toString()).find()) {
+                                int cant = Integer.parseInt(txtCantidad.getText().toString());
+                                if(cant < cantidadAux){
+                                }else{
+                                    msgDialog("Debe ser menor a "+cantidadAux);
+                                    txtCantidad.setText("");
+                                }
+                            }
+                        }
+                    });
+                }catch (Exception e){
+                    Log.e("Error-jj", "- "+e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void buscarCodigoImplemento(String search) {
         ActivityFragmentUtils.hideTeclado(context, lblError);
         if (search.isEmpty()){
             ActivityFragmentUtils.ShowMessage("Debe poner un código de búsqueda", context, new ActivityFragmentUtils.onClickDialog() {
@@ -176,11 +266,11 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
                 }
             });
         }else{
-            getListImplementoByParams(search, position);
+            getListImplementoByParams(search);
         }
     }
 
-    private void getListImplementoByParams(String search, int position) {
+    private void getListImplementoByParams(String search) {
         if(ActivityFragmentUtils.isConnetionNetwork(context)){
             FirebaseImplemento.getInventarioByParams(context, search, new FirebaseImplemento.FbRsImplemento() {
                 @Override
@@ -188,16 +278,9 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
                     if(isSucces){
                         if(implementos.get(0).getCantidad() > 0){
                             msgDialog("Hay en stock " + implementos.get(0).getCantidad() + "");
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    EntregaItem item = listEntregas.get(position);
-                                    item.setDescripcion(implementos.get(0).getDescripcion());
-                                    item.setCantidad(implementos.get(0).getCantidad());
-                                    listEntregas.set(position, item);
-                                    adapterEntrega.notifyDataSetChanged();
-                                }
-                            });
+                            txtDescripcion.setText(""+implementos.get(0).getDescripcion());
+                            cantidadAux = implementos.get(0).getCantidad();
+                            txtCantidad.setText("");
                         }else{
                             msgDialog("La cantidad de elementos es 0");
                         }
@@ -263,8 +346,12 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
         });
 
         btnAddRv.setOnClickListener(view -> {
-            listEntregas.add(addEntrega1());
-            adapterEntrega.notifyDataSetChanged();
+            ActivityFragmentUtils.hideTeclado(context, lblError);
+            if(validateAddEntrega()){
+                listEntregas.add(addEntrega1());
+                adapterEntrega.notifyDataSetChanged();
+                camposVacios();
+            }
         });
 
         cardDepartamento.setOnClickListener(view -> {
@@ -346,6 +433,30 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
                 });
             }
         });
+
+        lblFecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    DatePickerFragmentDialog.newInstance(DateTimeBuilder.newInstance()
+                            .withMinDate(ActivityFragmentUtils.minDate().getTimeInMillis())
+                            .withMaxDate(ActivityFragmentUtils.maxDate().getTimeInMillis()))
+                            .show(getChildFragmentManager(), "DatePickerFragmentDialog");
+                }catch (Exception e){
+                    Log.e("Error-jj", e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void camposVacios() {
+        cantidadAux = 0;
+        txtDescripcion.setText("");
+        txtCantidad.setText("");
+        txtObservacion.setText("");
+        txtTalla.setText("");
+        cbNuevo.setChecked(true);
+        cbReposicion.setChecked(false);
     }
 
     private boolean validateCampos() {
@@ -353,11 +464,13 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
         if(isDepartamento){
             if(departamento == null){
                 msgDialog("Debe seleccionar un departamento");
+                sp_departamento.requestFocus();
                 return false;
             }
         }else if(isArea){
             if(puesto == null){
                 msgDialog("Debe seleccionar un área");
+                sp_area.requestFocus();
                 return false;
             }
         }else if (isEmpleado){
@@ -369,6 +482,10 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
         if(listEntregas == null || listEntregas.isEmpty() || listEntregas.size() < 0){
             msgDialog("Debes agregar ítems");
             respuesta = false;
+        }
+        if(lblFecha.getText().toString().isEmpty() || lblFecha.getText().toString().length() < 0){
+            msgDialog("Debe ingresar una fecha de entrega");
+            return false;
         }
         return respuesta;
     }
@@ -398,7 +515,7 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
     }
 
     private void getListEmpleadoByParams(String params) {
-        FirebaseEmpleado.getEmpleadosByParams(context, params, new FirebaseEmpleado.FbRsEmpleado() {
+        FirebaseEmpleado.getEmpleadosByParams(context, "ci", params, new FirebaseEmpleado.FbRsEmpleado() {
             @Override
             public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
                 lyRsEmpleado.setVisibility(View.VISIBLE);
@@ -432,31 +549,49 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
             entregaModel.setTipo_entrega("empleado");
             entregaModel.setEmpleado(empleado);
         }
-        entregaModel.setFecha_creacion(ActivityFragmentUtils.getDateNowStr());
+        entregaModel.setFecha_creacion(ActivityFragmentUtils.getDateNowFB1());
+        entregaModel.setFecha_time_creacion(ActivityFragmentUtils.getDateNow().getTime());
+
+        entregaModel.setFecha_entrega(lblFecha.getText().toString());
+        entregaModel.setFecha_time_entrega(time_fecha_entrega);
+        entregaModel.setIs_create(true);
+        entregaModel.setIs_entregado(false);
+
         entregaModel.setEntregaItems(listEntregas);
         return entregaModel;
     }
 
     private EntregaItem addEntrega1 (){
         EntregaItem item = new EntregaItem();
-        item.setDescripcion("código");
-        item.setFecha("dd/mm/yyy");
-        item.setNuevo(false);
-        item.setReposicion(false);
-        item.setCantidad(0);
-        item.setMotivo_cambio("");
-        item.setTalla("");
+        item.setDescripcion(txtDescripcion.getText().toString().trim());
+        item.setNuevo(cbNuevo.isChecked());
+        item.setReposicion(cbReposicion.isChecked());
+        item.setCantidad(Integer.parseInt(txtCantidad.getText().toString()));
+        item.setMotivo_cambio(txtObservacion.getText().toString());
+        item.setTalla(txtTalla.getText().toString());
         return item;
+    }
+
+    boolean validateAddEntrega(){
+        if(txtDescripcion.getText().toString().isEmpty() || txtDescripcion.getText().toString().length() < 0){
+            txtDescripcion.requestFocus();
+            msgDialog("Campo descripción de búsqueda requerido");
+            return  false;
+        }
+
+        if(txtCantidad.getText().toString().isEmpty() || txtCantidad.getText().toString().length() < 0){
+            txtCantidad.requestFocus();
+            msgDialog("Campo cantidad requerido");
+            return  false;
+        }
+
+        return true;
     }
 
     @Override
     public void onDateSet(long date) {
-        EntregaItem item = listEntregas.get(positionFecha);
-        //Log.e("Error-ññ", "xx "+listEntregas.toString());
-        item.setFecha(ActivityFragmentUtils.getDateOnly1(date));
-        listEntregas.set(positionFecha, item);
-        //Log.e("Error-ññ", "x-x "+listEntregas.toString());
-        adapterEntrega.notifyDataSetChanged();
+        lblFecha.setText(String.valueOf(ActivityFragmentUtils.getDateOnly1(date)));
+        time_fecha_entrega = date;
     }
 
     @Override

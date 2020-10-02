@@ -78,10 +78,50 @@ public class FirebaseEmpleado {
         }
     }
 
-    public static void getEmpleadosByParams(Context context, String params, FbRsEmpleado rsEmpleado){
+    public static void getEmpleadosByParams(Context context, String params, String search, FbRsEmpleado rsEmpleado){
         loading(context);
         DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
-        Query myTopPostsQuery = databaseReference.orderByChild("ci").equalTo(params);
+        Query myTopPostsQuery = databaseReference.orderByChild(params).equalTo(search);
+        myTopPostsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //Log.e("Error-",".0. "+dataSnapshot.toString());
+                if (dataSnapshot.exists()) {
+                    try {
+                        //List<Empleado> empleados = (List<Empleado>) dataSnapshot.getValue(Empleado.class);
+                        //Log.e("Error-",".1. "+dataSnapshot.toString());
+                        List<Empleado> empleados = new ArrayList<>();
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            //Log.e("Error-",".2. "+child.toString());
+                            Empleado empleado = child.getValue(Empleado.class);
+                            //Log.e("Error-",".3. "+empleado.toString());
+                            empleados.add(empleado);
+                        }
+                        progressDialog.dismiss();
+                        rsEmpleado.isSuccesError(true, "", empleados);
+                    }catch (Exception e){
+                        Log.e("Error-",e.getMessage());
+                        progressDialog.dismiss();
+                        rsEmpleado.isSuccesError(false, "", new ArrayList<>());
+                    }
+                }else {
+                    progressDialog.dismiss();
+                    rsEmpleado.isSuccesError(false, "", new ArrayList<>());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                progressDialog.dismiss();
+                rsEmpleado.isSuccesError(false, "", new ArrayList<>());
+            }
+        });
+    }
+
+    public static void getEmpleadosByParamsSearch(Context context, String params, String search, FbRsEmpleado rsEmpleado){
+        loading(context);
+        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
+        Query myTopPostsQuery = databaseReference.orderByChild(params).startAt(search).endAt(search+"\uf8ff");
         myTopPostsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
