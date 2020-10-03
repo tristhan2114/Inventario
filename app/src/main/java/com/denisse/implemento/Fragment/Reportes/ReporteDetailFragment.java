@@ -2,10 +2,11 @@ package com.denisse.implemento.Fragment.Reportes;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -15,12 +16,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.denisse.implemento.Adapter.Reporte.DetalleAdapter;
+import com.denisse.implemento.Adapter.Reporte.SubDetalleAdapter;
 import com.denisse.implemento.Model.Entrega.EntregaItem;
 import com.denisse.implemento.Model.Entrega.EntregaModel;
 import com.denisse.implemento.R;
 import com.denisse.implemento.Utils.ActivityFragmentUtils;
+import com.denisse.implemento.Utils.EntregaOp.EntregasOp;
 import com.denisse.implemento.Utils.EntregaUtils.FirebaseEntrega;
 import com.fastaccess.datetimepicker.DatePickerFragmentDialog;
 import com.fastaccess.datetimepicker.DateTimeBuilder;
@@ -30,21 +35,13 @@ import com.fastaccess.datetimepicker.callback.TimePickerCallback;
 import java.util.ArrayList;
 import java.util.List;
 
-import lecho.lib.hellocharts.formatter.AxisValueFormatter;
-import lecho.lib.hellocharts.formatter.SimpleAxisValueFormatter;
 import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.SubcolumnValue;
-import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
-import lecho.lib.hellocharts.view.LineChartView;
 
 public class ReporteDetailFragment extends Fragment implements DatePickerCallback, TimePickerCallback {
 
@@ -64,20 +61,19 @@ public class ReporteDetailFragment extends Fragment implements DatePickerCallbac
     List<SubcolumnValue> values;
     SwipeRefreshLayout refresh;
 
-    private String tipo = "";
+    private String tipo = "", name = "";
     private boolean isInicial = true;
     private long timeFechaInit, timeFechaFin;
+    private List<EntregaModel> listData = new ArrayList<>();
+    private RecyclerView rv_detalle_reporte, rv_subdetalle_reporte;
+    private List<Integer> colors = new ArrayList<>();
+    private LinearLayout lySearch;
 
     /*
 
     https://github.com/lecho/hellocharts-android
 
      */
-
-    LineChartView lineChartView;
-    String[] axisData = {"Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept",
-            "Oct", "Nov", "Dec"};
-    int[] yAxisData = {50, 20, 15, 30, 20, 60, 15, 40, 45, 10, 90, 18};
 
     public ReporteDetailFragment() {
         // Required empty public constructor
@@ -100,107 +96,21 @@ public class ReporteDetailFragment extends Fragment implements DatePickerCallbac
         return view;
     }
 
-    ArrayList yAxisValues ;
-    ArrayList axisValues ;
-    private void lineChart(List<EntregaModel> entregaModels) {
-        lineChartView = view.findViewById(R.id.chart1);
-
-        yAxisValues = new ArrayList();
-        axisValues = new ArrayList();
-
-
-        Line line = new Line(yAxisValues).setColor(Color.parseColor("#9C27B0"));
-        Log.e("Error-lko", "llegue "+tipo+ " .-.size  "+entregaModels.size());
-
-        for (int model = 0; model < entregaModels.size() ; ++model){
-            EntregaModel entregaModel = entregaModels.get(model);
-
-            Log.e("Error-lko", "llegue -equal-- "+entregaModel.getTipo_entrega() + " ...-... "+tipo+ " position "+model);
-
-            if(entregaModel.getTipo_entrega().equals(tipo)){
-
-                for (int itemReport = 0; itemReport < entregaModel.getEntregaItems().size(); ++itemReport){
-                    EntregaItem entregaItem = entregaModel.getEntregaItems().get(itemReport);
-
-                    if(entregaModel.getTipo_entrega().equals(tipo)){
-                        Log.e("Error-lko", "llegue -1-- "+entregaItem.getDescripcion()+ " ..-.. "+itemReport);
-                        Log.e("Error-lko", "llegue -2-- "+entregaItem.getCantidad());
-                        axisValues.add(itemReport, new AxisValue(itemReport).setLabel(entregaItem.getDescripcion().replace(" ", "\n")));
-                        yAxisValues.add(new PointValue(itemReport, entregaItem.getCantidad()));
-                    }
-
-                }
-
-            }
-
-        }
-/*
-        for (EntregaModel modelEntrega : entregaModels){
-            if(tipo.equals("area")){
-                for (int i = 0; i< modelEntrega.getEntregaItems().size(); ++i){
-                    Log.e("Error-lko", "llegue -1-- "+modelEntrega.getEntregaItems().get(i).getDescripcion());
-                    Log.e("Error-lko", "llegue -2-- "+modelEntrega.getEntregaItems().get(i).getCantidad());
-                    axisValues.add(i, new AxisValue(i).setLabel(modelEntrega.getEntregaItems().get(i).getDescripcion()));
-                    yAxisValues.add(new PointValue(i, modelEntrega.getEntregaItems().get(i).getCantidad()));
-                }
-            }else if(tipo.equals("departamento")){
-                for (int i = 0; i< modelEntrega.getEntregaItems().size(); ++i){
-                    Log.e("Error-lko", "llegue -31-- "+modelEntrega.getEntregaItems().get(i).getDescripcion());
-                    Log.e("Error-lko", "llegue -32-- "+modelEntrega.getEntregaItems().get(i).getCantidad());
-                    axisValues.add(i, new AxisValue(i).setLabel(modelEntrega.getEntregaItems().get(i).getDescripcion()));
-                    yAxisValues.add(new PointValue(i, modelEntrega.getEntregaItems().get(i).getCantidad()));
-                }
-            }
-
-        }*/
-
-        /*for (int i = 0; i < axisData.length; i++) {
-             axisValues.add(i, new AxisValue(i).setLabel(axisData[i]));
-        }
-
-        for (int i = 0; i < yAxisData.length; i++) {
-            yAxisValues.add(new PointValue(i, yAxisData[i]));
-        }*/
-
-        Log.e("Error-lko", "llegue -1544-- "+yAxisValues.toString()+ " ..-.. "+axisValues.get(0).toString());
-
-        List lines = new ArrayList();
-        lines.add(line);
-
-        LineChartData data = new LineChartData();
-        data.setLines(lines);
-
-        Axis axis = new Axis();
-        axis.setValues(axisValues);
-        axis.setTextSize(16);
-        axis.setTextColor(Color.parseColor("#03A9F4"));
-        data.setAxisXBottom(axis);
-
-        Axis yAxis = new Axis();
-        yAxis.setName("Sales in millions");
-        yAxis.setTextColor(Color.parseColor("#03A9F4"));
-        yAxis.setTextSize(16);
-        data.setAxisYLeft(yAxis);
-
-        lineChartView.setLineChartData(data);
-        Viewport viewport = new Viewport(lineChartView.getMaximumViewport());
-        viewport.top = 20;
-        lineChartView.setMaximumViewport(viewport);
-        lineChartView.setCurrentViewport(viewport);
-    }
-
     private void getDataIntent() {
         Bundle bundle = getArguments();
         if(bundle != null){
             tipo = (String) bundle.get("tipo");
 
             String titulo = (String) bundle.get("titulo");
-            lblHome.setText(titulo);
-            lblHome.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+            //lblHome.setText(titulo);
+            //lblHome.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+            lblTileToolBar.setText(titulo);
+            lblTileToolBar.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
         }
     }
 
     private void initToobar() {
+        lySearch = view.findViewById(R.id.lySearch);
         lblHome = view.findViewById(R.id.lblHome);
         lblTileToolBar = view.findViewById(R.id.lblTileToolBar);
         lblTileToolBar = view.findViewById(R.id.lblTileToolBar);
@@ -208,24 +118,25 @@ public class ReporteDetailFragment extends Fragment implements DatePickerCallbac
         img_main = view.findViewById(R.id.img_main);
         txtSearch = view.findViewById(R.id.txtSearch);
         btnBack = view.findViewById(R.id.btnBack);
-        btnBack.setVisibility(View.GONE);
+        btnBack.setVisibility(View.VISIBLE);
         txtSearch.setVisibility(View.GONE);
         img_main.setVisibility(View.GONE);
         btnSearch.setVisibility(View.GONE);
         lblTileToolBar.setVisibility(View.VISIBLE);
-        lblTileToolBar.setText("");
-        lblTileToolBar.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+
 
     }
 
     private void startWidgets() {
+        rv_subdetalle_reporte =  view.findViewById(R.id.rv_subdetalle_reporte);
+        rv_detalle_reporte =  view.findViewById(R.id.rv_detalle_reporte);
         lblFechaInicial =  view.findViewById(R.id.lblFechaInicial);
         lblFechaFin =  view.findViewById(R.id.lblFechaFin);
         refresh = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
         chart = (ColumnChartView) view.findViewById(R.id.chart);
         chart.setOnValueTouchListener(new ValueTouchListener());
 
-        getImplementos();
+        //getImplementos();
 
         refresh.setColorSchemeColors(getResources().getColor(R.color.colorPrimary),
                 getResources().getColor(R.color.colorPrimaryDark),
@@ -267,76 +178,124 @@ public class ReporteDetailFragment extends Fragment implements DatePickerCallbac
                 }
             }
         });
+
+        lySearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getImplementos();
+            }
+        });
     }
 
     void getImplementos() {
         if(ActivityFragmentUtils.isConnetionNetwork(context)){
-            FirebaseEntrega.getEntregas(context, new FirebaseEntrega.FbRsEntregas() {
-                @Override
-                public void isSuccesError(boolean isSucces, String msg, List<EntregaModel> entregaModels) {
-                    Log.e("Error-",".1. "+isSucces+ " .. -  "+msg);
-                    if(isSucces){
-                        msgDialogo(msg);
-                    }else{
-                        Log.e("Error-", "dbo2 "+entregaModels.toString());
-                        //generateData1(entregaModels);
-                        lineChart(entregaModels);
+
+            if(timeFechaInit != 0 && timeFechaFin !=0){
+                chart.setVisibility(View.INVISIBLE);
+                FirebaseEntrega.getEntregasByParams(context, tipo, timeFechaInit, timeFechaFin, new FirebaseEntrega.FbRsEntregas() {
+                    @Override
+                    public void isSuccesError(boolean isSucces, String msg, List<EntregaModel> entregaModels) {
+                        Log.e("Error-",".1. "+isSucces+ " .. -  "+msg);
+                        if(isSucces){
+                            msgDialogo(msg);
+                        }else{
+                            //Log.e("Error-", "dbo2 "+entregaModels.toString());
+                            generateData1(entregaModels);
+                        }
                     }
-                }
-            });
+                });
+            }else{
+                msgDialogo("Debes poner fecha inicial y final");
+            }
+
+
         }else{
             msgDialogo("Verifica tu conexión a internet");
         }
     }
 
     private void generateData1(List<EntregaModel> entregaModels ) {
+        listData.clear();
+        chart.setVisibility(View.VISIBLE);
+        for (int model = 0; model < entregaModels.size() ; ++model){
+            EntregaModel entregaModel = entregaModels.get(model);
+            Log.e("Error-lko", "llegue -equal-- "+entregaModel.getTipo_entrega() + " ...-... "+tipo+ " position "+model);
+            if(entregaModel.getTipo_entrega().equals(tipo)){
+                listData.add(entregaModel);
+            }
+        }
+
+        if(listData == null || listData.isEmpty() ||listData.size() >0){
+            msgDialogo("No hay información");
+            chart.setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        rv_detalle_reporte.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        rv_detalle_reporte.setHasFixedSize(true);
+
+        rv_subdetalle_reporte.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        rv_subdetalle_reporte.setHasFixedSize(true);
+        DetalleAdapter detalleAdapter = new DetalleAdapter(context, listData, new DetalleAdapter.OnCardClickListner() {
+            @Override
+            public void OnCardClicked(int position) {
+                EntregaModel model = listData.get(position);
+                if(model.getTipo_entrega().equals("area")){
+                    name = model.getPuesto().getDescripcion();
+                }else if(model.getTipo_entrega().equals("departamento")){
+                    name = model.getDepartamento().getDescripcion();
+                }else if(model.getTipo_entrega().equals("reposiciones")){
+
+                }
+                colors.clear();
+                if(model.getEntregaItems()!=null && model.getEntregaItems().size()>0){
+                    for (int itemReport = 0; itemReport < model.getEntregaItems().size(); ++itemReport){
+                        colors.add(ChartUtils.pickColor());
+                    }
+                }
+                createGrap(model);
+
+                SubDetalleAdapter subDetalleAdapter = new SubDetalleAdapter(context, model.getEntregaItems(), colors, new SubDetalleAdapter.OnCardClickListner() {
+                    @Override
+                    public void OnCardClicked(int position) {
+                        EntregaModel entregaModel = listData.get(position);
+                        EntregasOp.DialogInfService(context, entregaModel.getEntregaItems());
+                    }
+                }) ;
+                rv_subdetalle_reporte.setAdapter(subDetalleAdapter);
+            }
+        });
+        rv_detalle_reporte.setAdapter(detalleAdapter);
+    }
+
+    void createGrap(EntregaModel entregaItem){
         columns = new ArrayList<Column>();
         values = new ArrayList<SubcolumnValue>();
 
-        for (EntregaModel modelEntrega : entregaModels){
-
-            if(modelEntrega.getTipo_entrega().equals("area")){
-                for (EntregaItem items : modelEntrega.getEntregaItems()){
+        int i = 0;
+        if (entregaItem.getEntregaItems()!=null && entregaItem.getEntregaItems().size()>0) {
+                for (EntregaItem items : entregaItem.getEntregaItems()) {
                     SubcolumnValue subcolumnValue = new SubcolumnValue();
-                    subcolumnValue.setColor(ChartUtils.pickColor());
+                    subcolumnValue.setColor(colors.get(i));
                     subcolumnValue.setLabel(items.getDescripcion());
-                    subcolumnValue.setValue((float)items.getCantidad());
+                    subcolumnValue.setValue((float) items.getCantidad());
                     values.add(subcolumnValue);
-                }
-            }else if(modelEntrega.getTipo_entrega().equals("departamento")){
-                for (EntregaItem items : modelEntrega.getEntregaItems()){
-                    SubcolumnValue subcolumnValue = new SubcolumnValue();
-                    subcolumnValue.setColor(ChartUtils.pickColor());
-                    subcolumnValue.setLabel(items.getDescripcion());
-                    //subcolumnValue.setValue(Float.parseFloat(String.valueOf(items.getCantidad())));
-                    subcolumnValue.setValue((float)items.getCantidad());
-                    values.add(subcolumnValue);
+                    i++;
                 }
             }
-
-        }
 
         Column column = new Column(values);
         column.setHasLabels(true);
         column.setHasLabelsOnlyForSelected(true);
         columns.add(column);
-
         data = new ColumnChartData(columns);
-
 
         Axis axisX = new Axis();
         Axis axisY = new Axis().setHasLines(true);
 
-        if(tipo.equals("area")){
-            axisX.setName("Área");
-            axisY.setName("Cantidad");
-        }else if(tipo.equals("departamento")){
-            axisX.setName("Departamento");
-            axisY.setName("Cantidad");
-        }else if(tipo.equals("reposiciones")){
-            axisX.setName("Área");
-            axisY.setName("Cantidad");
-        }
+        axisX.setName(name);
+        axisY.setName("Cantidad");
+
 
         axisX.setTextSize(18);
         axisX.setTextColor(context.getResources().getColor(R.color.colorBlack));

@@ -85,9 +85,9 @@ public class AdapterEntregaList extends RecyclerView.Adapter<AdapterEntregaList.
             String fec[] = fecha.split(" ");
             fecha = fec[0];
             respuesta =
-                    ActivityFragmentUtils.ucFirst(ActivityFragmentUtils.getDayNameNumber(fecha, "day_name")) +" "+
+                    ActivityFragmentUtils.ucFirst(ActivityFragmentUtils.getDayNameNumber(fecha, "day_name")).substring(0,3) +" "+
                             ActivityFragmentUtils.getDayNameNumber(fecha, "day_number") +", "+
-                            ActivityFragmentUtils.getDayNameNumber(fecha, "Month") +" "+
+                            ActivityFragmentUtils.getDayNameNumber(fecha, "Month").substring(0,3) +" "+
                             ActivityFragmentUtils.getDayNameNumber(fecha, "years");
         }catch (Exception e){
             Log.e("Error-dsds", "..- "+e.getMessage());

@@ -91,6 +91,7 @@ public class ReporteFragment extends Fragment {
         btnRepArea = view.findViewById(R.id.btnRepArea);
         btnRepDepart = view.findViewById(R.id.btnRepDepart);
         btnRepReposi = view.findViewById(R.id.btnRepReposi);
+        btnRepReposi.setVisibility(View.GONE);
 
         btnRepStock.setOnClickListener(view -> {
             Intent intent = new Intent(context, DetailActivity.class);

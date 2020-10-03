@@ -83,6 +83,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
                         android:text="Nuevo"
+                        android:enabled="false"
                         android:textColor="@color/md_light_blue_500"
                         android:textSize="17dp"
                         android:textStyle="bold"/>
@@ -100,6 +101,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
                         android:text="Reposición"
+                        android:enabled="false"
                         android:textColor="@color/md_light_blue_500"
                         android:textSize="17dp"
                         android:textStyle="bold"/>

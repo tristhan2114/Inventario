@@ -15,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -47,6 +48,42 @@ public class FirebaseEntrega {
         loading(context);
         DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_ENTREGAS);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                progressDialog.dismiss();
+                if (dataSnapshot.exists()) {
+                    try {
+                        List<EntregaModel> entregaModels = new ArrayList<>();
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            EntregaModel entregaModel = child.getValue(EntregaModel.class);
+                            entregaModels.add(entregaModel);
+                        }
+                        rsEntregas.isSuccesError(false, "ok", entregaModels);
+                    }catch (Exception e){
+                        Log.e("Error-","catch "+e.getMessage());
+                        rsEntregas.isSuccesError(true, "No hay entregas", new ArrayList<>());
+                    }
+                }else {
+                    Log.e("Error-", "oool else");
+                    rsEntregas.isSuccesError(true, "No hay entregas", new ArrayList<>());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Error-dtf", ".- "+databaseError.toString());
+                progressDialog.dismiss();
+                rsEntregas.isSuccesError(true, "No hay entregas e-database", new ArrayList<>());
+            }
+        });
+    }
+
+    public static void getEntregasByParams(Context context, String tipo_entrega, long fechInicial, long fechFin, FbRsEntregas rsEntregas){
+        loading(context);
+        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_ENTREGAS);
+        Query myTopPostsQuery = databaseReference
+                .orderByChild("fecha_time_creacion").startAt(fechInicial).endAt(fechFin);
+        myTopPostsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 progressDialog.dismiss();

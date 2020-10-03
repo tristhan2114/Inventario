@@ -12,57 +12,58 @@
         layout="@layout/app_bar"/>
 
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_margin="5dp">
+
+            <TextView
+                android:id="@+id/lblHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="visible"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textColor="@color/md_light_blue_500"
+                android:text="Bienvenido, Name user"/>
+
+        </LinearLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
-
-                <TextView
-                    android:id="@+id/lblHome"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:visibility="visible"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/md_light_blue_500"
-                    android:text="Bienvenido, Name user"/>
-
-            </LinearLayout>
-
-            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/refresh"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/lyData"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.6"
+                    android:orientation="vertical">
 
-
-
-                    <LinearLayout
-                        android:id="@+id/lyData"
+                    <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="6dp"
+                        app:cardUseCompatPadding="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginBottom="5dp"
                             android:orientation="horizontal">
 
                             <LinearLayout
@@ -73,15 +74,14 @@
 
                                 <TextView
                                     android:id="@+id/lblFechaInicial"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="35dp"
-                                    android:minWidth="185dp"
                                     android:paddingStart="5dp"
                                     android:layout_gravity="center_vertical"
                                     android:gravity="center_vertical"
                                     android:hint="fecha inicial"
                                     android:background="@drawable/format_edittext"
-                                    android:textSize="17dp"/>
+                                    android:textSize="15dp"/>
 
                             </LinearLayout>
 
@@ -93,43 +93,73 @@
 
                                 <TextView
                                     android:id="@+id/lblFechaFin"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="35dp"
-                                    android:minWidth="185dp"
                                     android:paddingStart="5dp"
                                     android:layout_gravity="center_vertical"
                                     android:gravity="center_vertical"
                                     android:hint="fecha final"
                                     android:background="@drawable/format_edittext"
-                                    android:textSize="17dp"/>
+                                    android:textSize="15dp"/>
 
                             </LinearLayout>
 
+                            <LinearLayout
+                                android:id="@+id/lySearch"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/md_blue_200"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:layout_weight="0.2">
+
+                                <ImageView
+                                    android:layout_width="35dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:src="@android:drawable/ic_menu_search"
+                                    android:tint="@color/colorWhite"/>
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
-                        <lecho.lib.hellocharts.view.ColumnChartView
-                            android:id="@+id/chart"
-                            android:layout_marginTop="10dp"
-                            android:layout_width="match_parent"
-                            android:visibility="gone"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"/>
+                    </android.support.v7.widget.CardView>
 
-                        <lecho.lib.hellocharts.view.LineChartView
-                            android:id="@+id/chart1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                    </LinearLayout>
+                    <lecho.lib.hellocharts.view.ColumnChartView
+                        android:id="@+id/chart"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:visibility="invisible"
+                        android:layout_height="wrap_content"/>
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:orientation="vertical"
+                    android:paddingBottom="7dp"
+                    android:layout_weight="0.4">
 
-            </android.support.v4.widget.SwipeRefreshLayout>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_subdetalle_reporte"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp" />
 
-        </LinearLayout>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_detalle_reporte"
+                        android:layout_width="match_parent"
+                        android:layout_height="85dp"
+                        tools:listitem="@layout/row_item"/>
 
-    </ScrollView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
