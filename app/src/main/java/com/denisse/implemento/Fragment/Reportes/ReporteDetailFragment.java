@@ -185,6 +185,13 @@ public class ReporteDetailFragment extends Fragment implements DatePickerCallbac
                 getImplementos();
             }
         });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
     }
 
     void getImplementos() {
@@ -225,7 +232,7 @@ public class ReporteDetailFragment extends Fragment implements DatePickerCallbac
             }
         }
 
-        if(listData == null || listData.isEmpty() ||listData.size() >0){
+        if(listData == null || listData.isEmpty() ||listData.size() <0){
             msgDialogo("No hay información");
             chart.setVisibility(View.INVISIBLE);
             return;
