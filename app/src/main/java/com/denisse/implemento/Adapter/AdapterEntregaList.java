@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +20,10 @@ import com.denisse.implemento.Model.Entrega.EntregaItem;
 import com.denisse.implemento.Model.Entrega.EntregaModel;
 import com.denisse.implemento.R;
 import com.denisse.implemento.Utils.ActivityFragmentUtils;
+import com.denisse.implemento.Utils.Alarma.AlarmaUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class AdapterEntregaList extends RecyclerView.Adapter<AdapterEntregaList.ViewHolder> {
@@ -65,6 +69,7 @@ public class AdapterEntregaList extends RecyclerView.Adapter<AdapterEntregaList.
         }
         if(item.getIs_entregado()!=null && item.getIs_entregado()){
             estado += ", entregado";
+            holder.btnRealizaEntrega.setVisibility(View.GONE);
         }
         holder.lblEstado.setText(estado);
 
@@ -75,6 +80,45 @@ public class AdapterEntregaList extends RecyclerView.Adapter<AdapterEntregaList.
             }
         });
 
+        holder.btnRealizaEntrega.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String fecha_actual = ActivityFragmentUtils.getDateNowFB1();
+                String fecha_entrega = item.getFecha_entrega();
+
+                String msg = "¿Seguro quieres realizar entrega? <br>"+
+                        "Fecha de entrega: "+fecha_entrega+"<br>"+
+                        "Fecha actual: "+fecha_actual.substring(0, 10);
+                ActivityFragmentUtils.ShowMessageDefault(msg, context, new ActivityFragmentUtils.onClickDialog() {
+                    @Override
+                    public void onClickDialog(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        try {
+                            //Log.e("Error-po", " "+fecha_actual+ " " + fecha_entrega);
+                            SimpleDateFormat dateFormat = new SimpleDateFormat ("dd/MM/yyyy");
+                            Date date1 = dateFormat.parse(fecha_actual.substring(0, 10));
+                            Date date2 = dateFormat.parse(fecha_entrega.substring(0, 10));
+
+                            if(fecha_actual.equals(fecha_actual)){
+                                // es hoy
+                                AlarmaUtils.updateAlarma(item);
+                                onCardClickListner.updateList(true);
+                            }else{
+                                //comprueba si es que entrega esta después que fecha actual
+                                if(date2.after(date1)) {
+                                    AlarmaUtils.updateAlarma(item);
+                                    onCardClickListner.updateList(true);
+                                }
+                            }
+
+                        }catch (Exception e){
+
+                        }
+
+                    }
+                });
+            }
+        });
 
     }
 
@@ -103,6 +147,7 @@ public class AdapterEntregaList extends RecyclerView.Adapter<AdapterEntregaList.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView lblTipoEntrega, lblFechaCreacion, lblNameEntrega, lblFechaEntrega, lblEstado;
+        CardView btnRealizaEntrega;
 
         public ViewHolder(View v) {
             super(v);
@@ -111,12 +156,14 @@ public class AdapterEntregaList extends RecyclerView.Adapter<AdapterEntregaList.
             lblNameEntrega = v.findViewById(R.id.lblNameEntrega);
             lblFechaEntrega = v.findViewById(R.id.lblFechaEntrega);
             lblEstado = v.findViewById(R.id.lblEstado);
+            btnRealizaEntrega = v.findViewById(R.id.btnRealizaEntrega);
 
         }
     }
 
     public interface OnCardClickListner {
         void OnCardClicked(int position);
+        void updateList(boolean status);
     }
 
 }

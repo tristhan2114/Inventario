@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.denisse.implemento.Model.Entrega.EntregaItem;
 import com.denisse.implemento.Model.Implemento;
 import com.denisse.implemento.Utils.Constantes;
 import com.denisse.implemento.Utils.ImplementosOp.AdministracionOp;
@@ -47,7 +48,7 @@ public class FirebaseImplemento {
         loading(context);
         DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_IMPLEMENTOS);
         Query myTopPostsQuery = databaseReference.orderByChild("codigo").equalTo(params);
-        myTopPostsQuery.addValueEventListener(new ValueEventListener() {
+        myTopPostsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //Log.e("Error-",".0. "+dataSnapshot.toString());
@@ -227,6 +228,45 @@ public class FirebaseImplemento {
         });
     }
 
+    public static void updateStockImplementos(Context context, List<EntregaItem> entregaItems, FbRsImplemento fbRsImplemento){
+        //loading(context);
+        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_IMPLEMENTOS);
+        if(entregaItems!=null && entregaItems.size()>0){
+         for (EntregaItem item : entregaItems){
+             Query myTopPostsQuery = databaseReference.orderByChild("descripcion").equalTo(item.getDescripcion()).limitToFirst(1);
+             myTopPostsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                     if (dataSnapshot.exists()){
+                        try {
+                            String id = "";
+                            int auxCantidad = 0;
+                            for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+                                id = (String) messageSnapshot.child("id").getValue();
+                                auxCantidad = Integer.parseInt(String.valueOf(messageSnapshot.child("cantidad").getValue()));
+                            }
+
+                            int cantidadRs = auxCantidad - item.getCantidad();
+
+                            DatabaseReference dbReferenceUpdate = getmDatabase().getReference(Constantes.REQUEST_IMPLEMENTOS).child(id);
+                            dbReferenceUpdate.child("cantidad").setValue(cantidadRs);
+                            fbRsImplemento.isSuccesError(false, "ok", new ArrayList<>());
+                        }catch (Exception e){
+                            Log.e("Error-tr", "..- "+e.getMessage());
+                            fbRsImplemento.isSuccesError(true, "Error", new ArrayList<>());
+                        }
+                     }
+                 }
+
+                 @Override
+                 public void onCancelled(@NonNull DatabaseError databaseError) {
+                     Log.e("Error-tr", ".databaseError.- "+databaseError.getMessage());
+                     fbRsImplemento.isSuccesError(true, "Error", new ArrayList<>());
+                 }
+             });
+         }
+        }
+    }
 
     public interface FbRsImplemento {
         void isSuccesError(boolean isSucces, String msg, List<Implemento> implementos);

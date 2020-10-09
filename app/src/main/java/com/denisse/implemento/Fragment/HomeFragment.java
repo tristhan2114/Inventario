@@ -3,7 +3,9 @@ package com.denisse.implemento.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
@@ -18,11 +20,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.denisse.implemento.R;
+import com.denisse.implemento.Utils.ActivityFragmentUtils;
+import com.denisse.implemento.Utils.Alarma.Alarma;
+import com.denisse.implemento.Utils.Alarma.AlarmaUtils;
+import com.denisse.implemento.Utils.Alarma.Notificacion;
 import com.denisse.implemento.Utils.EmpleadoUtils.FirebaseEmpleado;
 import com.denisse.implemento.Activity.ContainerActivity;
 import com.denisse.implemento.Activity.LoginActivity;
 import com.denisse.implemento.Utils.Constantes;
 import com.denisse.implemento.Utils.SharedData;
+
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -153,14 +161,11 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-        btnRegistrarEntregas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, ContainerActivity.class);
-                intent.putExtra("action", "Entrega");
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+        btnRegistrarEntregas.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ContainerActivity.class);
+            intent.putExtra("action", "Entrega");
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
         btnRegistrarReportes.setOnClickListener(view -> {
@@ -169,5 +174,36 @@ public class HomeFragment extends Fragment {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void createNotifyAlaram(){
+        //Log.e("Error-fe", "before "+ActivityFragmentUtils.getFechaInitBefore().toString());
+        //Log.e("Error-fe", "hoy "+ActivityFragmentUtils.getFechaFin().toString());
+        long fechaIni = ActivityFragmentUtils.getFechaInitBefore().getTime();
+        long fechaFin = ActivityFragmentUtils.getFechaFin().getTime();
+        AlarmaUtils.getAlarma(fechaIni, fechaFin, new AlarmaUtils.FbAlarmEntregas() {
+            @Override
+            public void rsAlarm(boolean isSucces, String msg, List<Alarma> list) {
+                if(list!=null && list.size() >0){
+                    for (Alarma alarma : list){
+                        Notificacion.notificationAlarma(context, alarma.getTitulo(), alarma.getMensaje(), alarma.getId_entrega());
+                    }
+                }
+            }
+        });
+        //Notificacion.notificationAlarma(context, "titulo   ", "hola como estas\n mirame como escribo para ti y como ya sabes como me pongo por eso te saludo personita... ", "23232");
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(SharedData.getKey(context, SharedData.ROL) != null){
+            if (SharedData.getKey(context, SharedData.ROL).equals(Constantes.ROL_ADMINISTRADOR) ||
+                    SharedData.getKey(context, SharedData.ROL).equals(Constantes.ROL_ASISTENTE)) {
+                createNotifyAlaram();
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ public class Constantes {
     public static final String REQUEST_USUARIO = ISPRODUCTION ? "/USUARIO/" : "/TEST_USUARIO/";
     public static final String REQUEST_IMPLEMENTOS = ISPRODUCTION ? "/IMPLEMENTOS/" : "/TEST_IMPLEMENTOS/";
     public static final String REQUEST_ENTREGAS = ISPRODUCTION ? "/ENTREGAS/" : "/TEST_ENTREGAS/";
+    public static final String REQUEST_ALARMAS = ISPRODUCTION ? "/ALARMAS/" : "/TEST_ALARMAS/";
 
     public static final String REQUEST_GENEROS = ISPRODUCTION ? "/GENEROS/" : "/TEST_GENEROS/";
     public static final String REQUEST_AREAS = ISPRODUCTION ? "/AREAS/" : "/TEST_AREAS/";

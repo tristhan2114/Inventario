@@ -202,19 +202,7 @@ public class ReporteStockFragment extends Fragment {
 
     private void loadAdapter(List<Implemento> list) {
         Log.e("Error-",".5. "+list.toString());
-        adapterInventario = new AdapterReporteStock(context, list, new AdapterReporteStock.OnCardClickListner() {
-            @Override
-            public void OnCardClicked(View view, int position) {
-                /*Implemento item = list.get(position);
-                Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("action","createUpdateInventario");
-                intent.putExtra("name","Actualizar");
-                intent.putExtra("isCreate",false);
-                intent.putExtra("inventarioData", item);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);*/
-            }
-        });
+        adapterInventario = new AdapterReporteStock(context, list, true);
         rv_inventario.setAdapter(adapterInventario);
     }
 

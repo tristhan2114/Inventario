@@ -345,6 +345,29 @@ public class ActivityFragmentUtils {
         return date_;
     }
 
+    public static  Date getFechaInitBefore(){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, -3);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.setTimeZone(timeZoneDefault);
+        Date startDate = cal.getTime();
+        return startDate;
+    }
+
+    public static  Date getFechaFin(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        cal.setTimeZone(timeZoneDefault);
+        Date finDate = cal.getTime();
+        return finDate;
+    }
+
     public static String ucFirst(String str) {
         if (str == null || str.isEmpty()) {
             return str;

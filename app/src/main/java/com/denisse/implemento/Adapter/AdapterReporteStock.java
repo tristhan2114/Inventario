@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.denisse.implemento.Model.Implemento;
@@ -18,6 +19,7 @@ public class AdapterReporteStock extends RecyclerView.Adapter<AdapterReporteStoc
 
     private List<Implemento> listData;
     private Context context;
+    private Boolean isDelete = false;
     private OnCardClickListner onCardClickListner;
 
     // Adapter's Constructor
@@ -25,6 +27,12 @@ public class AdapterReporteStock extends RecyclerView.Adapter<AdapterReporteStoc
         this.listData = develops;
         this.context = context;
         this.onCardClickListner = onCardClickListner;
+    }
+
+    public AdapterReporteStock(Context context, List<Implemento> develops, boolean isDelete) {
+        this.listData = develops;
+        this.context = context;
+        this.isDelete = isDelete;
     }
 
     @Override
@@ -36,16 +44,21 @@ public class AdapterReporteStock extends RecyclerView.Adapter<AdapterReporteStoc
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Implemento item = listData.get(position);
+        if (isDelete != null && isDelete){
+            holder.lyEliminar.setVisibility(View.GONE);
+        }
         holder.lblCodigo.setText(item.getCodigo());
         holder.lblArea.setText( (item.getDescripcion()!=null)? item.getDescripcion() : "");
         holder.lblDescripcion.setText(Html.fromHtml("<font color='#2a2a2a'>Cantidad : </font>"+item.getCantidad()));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCardClickListner.OnCardClicked(v, position);
-            }
-        });
+        if (isDelete != null && !isDelete){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onCardClickListner.OnCardClicked(v, position);
+                }
+            });
+        }
     }
 
     @Override
@@ -55,12 +68,14 @@ public class AdapterReporteStock extends RecyclerView.Adapter<AdapterReporteStoc
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView lblCodigo, lblArea, lblDescripcion;
+        LinearLayout lyEliminar;
 
         public ViewHolder(View v) {
             super(v);
             lblCodigo = v.findViewById(R.id.lblCodigo);
             lblArea = v.findViewById(R.id.lblArea);
             lblDescripcion = v.findViewById(R.id.lblDescripcion);
+            lyEliminar = v.findViewById(R.id.lyEliminar);
         }
     }
 

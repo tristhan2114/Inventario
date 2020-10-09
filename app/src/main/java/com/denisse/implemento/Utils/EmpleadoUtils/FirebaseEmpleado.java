@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.denisse.implemento.Model.Empleado.Departamento;
 import com.denisse.implemento.Model.Empleado.Empleado;
+import com.denisse.implemento.Model.Empleado.Puesto;
 import com.denisse.implemento.Utils.ActivityFragmentUtils;
 import com.denisse.implemento.Utils.Constantes;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -114,6 +116,60 @@ public class FirebaseEmpleado {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 progressDialog.dismiss();
                 rsEmpleado.isSuccesError(false, "", new ArrayList<>());
+            }
+        });
+    }
+
+    public static void getEmpleadosByParamsEntrega(Context context, String params, Departamento departamento, Puesto puesto, FbRsEmpleado rsEmpleado){
+        loading(context);
+        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //Log.e("Error-",".0. "+dataSnapshot.toString());
+                if (dataSnapshot.exists()) {
+                    try {
+                        List<Empleado> empleados = new ArrayList<>();
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            Empleado empleado = child.getValue(Empleado.class);
+                            assert empleado != null;
+                            if(departamento != null) {
+                                if (empleado.getDepartamento() != null){
+                                    if(departamento.getId().equals(empleado.getDepartamento().getId())){
+                                        empleados.add(empleado);
+                                    }
+                                }
+                            }
+                            if(puesto != null){
+                                if(empleado.getPuesto() != null){
+                                    if(puesto.getId().equals(empleado.getPuesto().getId())){
+                                        empleados.add(empleado);
+                                    }
+                                }
+
+                            }
+                            //Log.e("Error-",".3. "+empleado.toString());
+                        }
+                        progressDialog.dismiss();
+                        if(empleados!=null && empleados.size()>0 ){
+                            rsEmpleado.isSuccesError(false, "pk", empleados);
+                        }else{
+                            rsEmpleado.isSuccesError(true, "No se puede programar entrega no hay empleado en "+params, new ArrayList<>());
+                        }
+                    }catch (Exception e){
+                        progressDialog.dismiss();
+                        rsEmpleado.isSuccesError(true, "No se puede programar entrega no hay empleado en "+params, new ArrayList<>());
+                    }
+                }else {
+                    progressDialog.dismiss();
+                    rsEmpleado.isSuccesError(true, "No se puede programar entrega no hay empleado en "+params, new ArrayList<>());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                progressDialog.dismiss();
+                rsEmpleado.isSuccesError(true, "No se puede programar entrega no hay empleado en "+params, new ArrayList<>());
             }
         });
     }

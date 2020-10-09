@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,8 @@ public class EntregaListFragment extends Fragment {
     private RecyclerView rv_entrega_list;
     private CardView btnAdd;
     private SwipeRefreshLayout refresh;
+    private String id_entrega = "";
+    private boolean isRefresh = true;
 
 
     public EntregaListFragment() {
@@ -66,8 +69,25 @@ public class EntregaListFragment extends Fragment {
         initializeToolbar();
         startWidgets();
         onActionClickListener();
-        getListEntregas();
+        getDataArgunments();
+
         return view;
+    }
+
+    private void getDataArgunments() {
+        try {
+            Bundle bundle = getArguments();
+            if(bundle.getSerializable("id_entrega")!=null){
+                id_entrega = (String) bundle.getSerializable("id_entrega");
+                isRefresh = false;
+                getListByNotify();
+                btnAdd.setVisibility(View.GONE);
+            }else{
+                getListEntregas();
+            }
+        }catch (Exception e){
+            getListEntregas();
+        }
     }
 
     private void initializeToolbar() {
@@ -106,7 +126,11 @@ public class EntregaListFragment extends Fragment {
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getListEntregas();
+                if(isRefresh){
+                    getListEntregas();
+                }else{
+                    getListByNotify();
+                }
                 refresh.setRefreshing(false);
             }
         });
@@ -153,12 +177,34 @@ public class EntregaListFragment extends Fragment {
         });
     }
 
+    private void getListByNotify(){
+        FirebaseEntrega.getEntregasByID(context, id_entrega, new FirebaseEntrega.FbRsEntregas() {
+            @Override
+            public void isSuccesError(boolean isSucces, String msg, List<EntregaModel> entregaModels) {
+                if(!isSucces){
+                    lyData.setVisibility(View.VISIBLE);
+                    lyError.setVisibility(View.GONE);
+                    startRecycler(entregaModels);
+                }else{
+                    lyData.setVisibility(View.GONE);
+                    lyError.setVisibility(View.VISIBLE);
+                    lblError.setText(msg);
+                }
+            }
+        });
+    }
+
     private void startRecycler(List<EntregaModel> entregaModels) {
         AdapterEntregaList adapterEntrega = new AdapterEntregaList(context, entregaModels, new AdapterEntregaList.OnCardClickListner() {
             @Override
             public void OnCardClicked(int position) {
                 EntregaModel entregaModel = entregaModels.get(position);
                 EntregasOp.DialogInfService(context, entregaModel.getEntregaItems());
+            }
+
+            @Override
+            public void updateList(boolean status) {
+                getDataArgunments();
             }
         });
         rv_entrega_list.setAdapter(adapterEntrega);

@@ -416,16 +416,26 @@ public class EntregaFragment extends Fragment implements DatePickerCallback, Tim
                     public void onClickDialog(DialogInterface dialog, int id) {
                         dialog.dismiss();
                         if(ActivityFragmentUtils.isConnetionNetwork(context)){
-                            FirebaseEntrega.createEntrega(context, modelEntrega(), new FirebaseEntrega.FbRsEntregas() {
+                            FirebaseEmpleado.getEmpleadosByParamsEntrega(context, modelEntrega().getTipo_entrega(), modelEntrega().getDepartamento(), modelEntrega().getPuesto(), new FirebaseEmpleado.FbRsEmpleado() {
                                 @Override
-                                public void isSuccesError(boolean isSucces, String msg, List<EntregaModel> entregaModels) {
-                                    if (isSucces){
+                                public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
+                                    if(isSucces){
                                         msgDialog(msg);
                                     }else{
-                                        msgDialog(msg);
+                                        FirebaseEntrega.createEntrega(context, modelEntrega(), new FirebaseEntrega.FbRsEntregas() {
+                                            @Override
+                                            public void isSuccesError(boolean isSucces, String msg, List<EntregaModel> entregaModels) {
+                                                if (isSucces){
+                                                    msgDialog(msg);
+                                                }else{
+                                                    msgDialog(msg);
+                                                }
+                                            }
+                                        });
                                     }
                                 }
                             });
+
                         }else{
                             msgDialog("Verifica tu conexión a internet");
                         }

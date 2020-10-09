@@ -5,10 +5,15 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.denisse.implemento.Adapter.AdapterEntregaList;
 import com.denisse.implemento.Model.Empleado.Empleado;
 import com.denisse.implemento.Model.Entrega.EntregaModel;
+import com.denisse.implemento.Model.Implemento;
+import com.denisse.implemento.Utils.ActivityFragmentUtils;
 import com.denisse.implemento.Utils.AdministracionOp.FirebaseAdministracion;
+import com.denisse.implemento.Utils.Alarma.AlarmaUtils;
 import com.denisse.implemento.Utils.Constantes;
+import com.denisse.implemento.Utils.ImplementoUtils.FirebaseImplemento;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -48,6 +53,41 @@ public class FirebaseEntrega {
         loading(context);
         DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_ENTREGAS);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                progressDialog.dismiss();
+                if (dataSnapshot.exists()) {
+                    try {
+                        List<EntregaModel> entregaModels = new ArrayList<>();
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            EntregaModel entregaModel = child.getValue(EntregaModel.class);
+                            entregaModels.add(entregaModel);
+                        }
+                        rsEntregas.isSuccesError(false, "ok", entregaModels);
+                    }catch (Exception e){
+                        Log.e("Error-","catch "+e.getMessage());
+                        rsEntregas.isSuccesError(true, "No hay entregas", new ArrayList<>());
+                    }
+                }else {
+                    Log.e("Error-", "oool else");
+                    rsEntregas.isSuccesError(true, "No hay entregas", new ArrayList<>());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Error-dtf", ".- "+databaseError.toString());
+                progressDialog.dismiss();
+                rsEntregas.isSuccesError(true, "No hay entregas e-database", new ArrayList<>());
+            }
+        });
+    }
+
+    public static void getEntregasByID(Context context, String id, FbRsEntregas rsEntregas){
+        loading(context);
+        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_ENTREGAS);
+        Query myTopPostsQuery = databaseReference.orderByChild("id").equalTo(id);
+        myTopPostsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 progressDialog.dismiss();
@@ -122,41 +162,45 @@ public class FirebaseEntrega {
         Map<String, Object> valuedata = entregaModel.toMap();
         Map<String, Object> objectdata = new HashMap<>();
         objectdata.put(Constantes.REQUEST_ENTREGAS + id + "/", valuedata);
+        String mensaje = "Realizar entrega a: ";
+        if(entregaModel.getTipo_entrega().equals("departamento")){
+            mensaje+=" "+ ActivityFragmentUtils.ucFirst(entregaModel.getDepartamento().getDescripcion().toLowerCase());
+        }else if(entregaModel.getTipo_entrega().equals("area")){
+            mensaje+=" "+ ActivityFragmentUtils.ucFirst(entregaModel.getPuesto().getDescripcion().toLowerCase());
+        }else if(entregaModel.getTipo_entrega().equals("empleado")){
+            mensaje+=" "+ entregaModel.getEmpleado().getNombres() + " "+entregaModel.getEmpleado().getApellidos();
+        }
+        mensaje +="\n En la siguiente fecha: "+ AdapterEntregaList.getFechaFormat(entregaModel.getFecha_entrega());
+        AlarmaUtils.createAlarma(entregaModel.getTipo_entrega(), mensaje, id, entregaModel.getFecha_time_entrega());
         databaseReference.updateChildren(objectdata).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                progressDialog.dismiss();
                 if(task.isSuccessful()){
-                    rsEmpleado.isSuccesError(false, "Entrega regitrada con exito.", new ArrayList<>());
+                    FirebaseImplemento.updateStockImplementos(context, entregaModel.getEntregaItems(), new FirebaseImplemento.FbRsImplemento() {
+                        @Override
+                        public void isSuccesError(boolean isSucces, String msg, List<Implemento> implementos) {
+                            progressDialog.dismiss();
+                            rsEmpleado.isSuccesError(false, "Entrega regitrada con exito.", new ArrayList<>());
+                        }
+                    });
                 }else{
+                    progressDialog.dismiss();
                     rsEmpleado.isSuccesError(true, "Hubo un error al registrar entrega.", new ArrayList<>());
                 }
             }
         });
         databaseReference.keepSynced(true);
     }
-/*
-    public static void updateEmpleado(Context context, Empleado empleado, FbRsEntregas rsEmpleado){
-        loading(context);
+
+    public static void updateEntrega(EntregaModel entregaModel){
         DatabaseReference databaseReference = getmDatabase()
-                .getReference(Constantes.REQUEST_EMPLEADOS)
-                .child(String.valueOf(empleado.getId()));
-        Map<String, Object> valuedata = empleado.toMap();
-        databaseReference.updateChildren(valuedata).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                progressDialog.dismiss();
-                if(task.isSuccessful()){
-                    rsEmpleado.isSuccesError(false, "Empleado editado con exito.", new ArrayList<>());
-                }else{
-                    rsEmpleado.isSuccesError(true, "Hubo un error al editar empleado.", new ArrayList<>());
-                }
-            }
-        });
+                .getReference(Constantes.REQUEST_ENTREGAS)
+                .child(String.valueOf(entregaModel.getId()));
+        Map<String, Object> valuedata = entregaModel.toMap();
+        databaseReference.updateChildren(valuedata);
         databaseReference.keepSynced(true);
     }
 
-*/
 
     public static void deleteImplemento(Context context, String id, FbRsEntregas rsEntregas){
         loading(context);
