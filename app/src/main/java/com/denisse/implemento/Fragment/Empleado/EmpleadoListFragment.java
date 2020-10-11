@@ -209,7 +209,9 @@ public class EmpleadoListFragment extends Fragment {
                 @Override
                 public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
                     if(isSucces){
-                        Log.e("Error-klk", ".,ñ "+isSucces+ " "+empleados.toString());
+                        //Log.e("Error-klk", ".,ñ "+isSucces+ " "+empleados.toString());
+                        lyError.setVisibility(View.GONE);
+                        lyData.setVisibility(View.VISIBLE);
                         loadAdapter(empleados);
                     }else{
                         msgError(msg);

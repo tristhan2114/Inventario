@@ -228,7 +228,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@mipmap/ic_reporte"/>
+                        android:src="@mipmap/ic_close_sesion"/>
 
                     <TextView
                         android:layout_width="wrap_content"
