@@ -20,46 +20,52 @@
             android:orientation="vertical"
             android:layout_above="@+id/ly_footer">
 
-            <LinearLayout
-                android:id="@+id/lyError"
-                android:visibility="gone"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/refresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="20dp">
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/lblError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:textColor="@color/colorBlack"
-                    android:text="No hay empleados registrados"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lyData"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <android.support.v4.widget.SwipeRefreshLayout
-                    android:id="@+id/refresh"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rv_empleado"
+                    <LinearLayout
+                        android:id="@+id/lyError"
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:listitem="@layout/row_item_empleado"/>
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="20dp">
 
-                </android.support.v4.widget.SwipeRefreshLayout>
+                        <TextView
+                            android:id="@+id/lblError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18dp"
+                            android:textColor="@color/colorBlack"
+                            android:text="No hay empleados registrados"/>
 
-            </LinearLayout>
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/lyData"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_empleado"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:listitem="@layout/row_item_empleado"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </android.support.v4.widget.SwipeRefreshLayout>
 
         </LinearLayout>
 
