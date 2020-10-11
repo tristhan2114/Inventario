@@ -129,10 +129,14 @@ public class AdministracionListFragment extends Fragment {
 
     private void getListEmpleados() {
         if(ActivityFragmentUtils.isConnetionNetwork(context)){
+            lyError.setVisibility(View.GONE);
+            lyData.setVisibility(View.GONE);
             FirebaseAdministracion.getAdministracion(context, new FirebaseAdministracion.FbRsAdministracion() {
                 @Override
                 public void isSuccesError(boolean isSucces, String msg, List<Administracion> administracions) {
                     if(isSucces){
+                        lyError.setVisibility(View.GONE);
+                        lyData.setVisibility(View.VISIBLE);
                         loadAdapter(administracions);
                     }else{
                         msgError(msg);

@@ -222,10 +222,14 @@ public class EmpleadoListFragment extends Fragment {
     }
 
     private void getListEmpleados() {
+        lyError.setVisibility(View.GONE);
+        lyData.setVisibility(View.GONE);
         FirebaseEmpleado.getEmpleados(context, new FirebaseEmpleado.FbRsEmpleado() {
             @Override
             public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
                 if(isSucces){
+                    lyError.setVisibility(View.GONE);
+                    lyData.setVisibility(View.VISIBLE);
                     loadAdapter(empleados);
                 }else{
                     msgError(msg);

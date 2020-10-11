@@ -178,11 +178,15 @@ public class InventarioListFragment extends Fragment {
 
     private void getListInvetario() {
         if(ActivityFragmentUtils.isConnetionNetwork(context)){
+            lyError.setVisibility(View.GONE);
+            lyData.setVisibility(View.GONE);
             FirebaseImplemento.getInventarios(context, new FirebaseImplemento.FbRsImplemento() {
                 @Override
                 public void isSuccesError(boolean isSucces, String msg, List<Implemento> implementos) {
                     Log.e("Error-",".1. "+isSucces+ " .. -  "+msg);
                     if(isSucces){
+                        lyError.setVisibility(View.GONE);
+                        lyData.setVisibility(View.VISIBLE);
                         loadAdapter(implementos);
                     }else{
                         msgError(msg);
