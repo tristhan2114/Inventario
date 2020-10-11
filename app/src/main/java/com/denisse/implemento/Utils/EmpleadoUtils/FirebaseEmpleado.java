@@ -23,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -177,7 +176,14 @@ public class FirebaseEmpleado {
     public static void getEmpleadosByParamsSearch(Context context, String params, String search, FbRsEmpleado rsEmpleado){
         loading(context);
         DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
-        Query myTopPostsQuery = databaseReference.orderByChild(params).startAt(search).endAt(search+"\uf8ff");
+        Query myTopPostsQuery = null;
+        if(params.equals("ci")){
+            Log.e("Error-yu",".123 "+params+" - "+search);
+            myTopPostsQuery = databaseReference.orderByChild(params).equalTo(search.trim());
+        }else{
+            Log.e("Error-yu",".456 "+params+" - "+search);
+            myTopPostsQuery = databaseReference.orderByChild(params).startAt(search).endAt(search+"\uf8ff");
+        }
         myTopPostsQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -188,7 +194,7 @@ public class FirebaseEmpleado {
                         //Log.e("Error-",".1. "+dataSnapshot.toString());
                         List<Empleado> empleados = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            //Log.e("Error-",".2. "+child.toString());
+                            Log.e("Error-",".2. "+child.toString());
                             Empleado empleado = child.getValue(Empleado.class);
                             //Log.e("Error-",".3. "+empleado.toString());
                             empleados.add(empleado);
@@ -198,18 +204,18 @@ public class FirebaseEmpleado {
                     }catch (Exception e){
                         Log.e("Error-",e.getMessage());
                         progressDialog.dismiss();
-                        rsEmpleado.isSuccesError(false, "", new ArrayList<>());
+                        rsEmpleado.isSuccesError(false, "No se encuentra empleado", new ArrayList<>());
                     }
                 }else {
                     progressDialog.dismiss();
-                    rsEmpleado.isSuccesError(false, "", new ArrayList<>());
+                    rsEmpleado.isSuccesError(false, "No se encuentra empleado", new ArrayList<>());
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 progressDialog.dismiss();
-                rsEmpleado.isSuccesError(false, "", new ArrayList<>());
+                rsEmpleado.isSuccesError(false, "No se encuentra empleado e-database", new ArrayList<>());
             }
         });
     }
@@ -234,33 +240,7 @@ public class FirebaseEmpleado {
         });
 
     }
-/*
-    public static void getEmpleadosCount(Context context, FbRsEmpleado rsEmpleado){
-        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    try {
-                        int size = (int) dataSnapshot.getChildrenCount();
-                        String codigo = customFormat("00000000", size+1);
-                        rsEmpleado.isSuccesError(true, codigo, new ArrayList<>());
-                    }catch (Exception e){
-                        rsEmpleado.isSuccesError(true, customFormat("00000000", 0), new ArrayList<>());
-                    }
-                }else {
-                    rsEmpleado.isSuccesError(true, customFormat("00000000", 0), new ArrayList<>());
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Error-dtf", ".- "+databaseError.toString());
-                rsEmpleado.isSuccesError(true, customFormat("00000000", 0), new ArrayList<>());
-            }
-        });
-    }
-*/
     public static void getEmpleados(Context context, FbRsEmpleado rsEmpleado){
         loading(context);
         DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_EMPLEADOS);

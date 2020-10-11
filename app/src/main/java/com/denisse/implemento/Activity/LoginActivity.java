@@ -53,8 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         txtEmail = findViewById(R.id.txtEmail);
         txtContrasenia = findViewById(R.id.txtContrasenia);
         lblTitle = findViewById(R.id.lblTitle);
-        //FirebaseEmpleado.cerrarSesion(activity.getApplicationContext());
-        //SharedData.clearSharedPreferences(context);
 
         btnIniciarSesion.setOnClickListener(view -> {
             email = txtEmail.getText().toString().trim();

@@ -1,5 +1,6 @@
 package com.denisse.implemento.Adapter.Reporte;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -42,7 +43,7 @@ public class DetalleAdapter extends RecyclerView.Adapter<DetalleAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         EntregaModel model = entregaModelList.get(position);
 
         String numEntrega = "", name = "";

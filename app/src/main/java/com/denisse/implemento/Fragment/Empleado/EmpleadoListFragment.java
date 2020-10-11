@@ -203,12 +203,13 @@ public class EmpleadoListFragment extends Fragment {
             dlgMsg("Parámetro de búsqueda no encontrada");
             return;
         }
+        Log.e("Error-yu",". "+params+" - "+search);
         if(ActivityFragmentUtils.isConnetionNetwork(context)){
             FirebaseEmpleado.getEmpleadosByParamsSearch(context, params, search, new FirebaseEmpleado.FbRsEmpleado() {
                 @Override
                 public void isSuccesError(boolean isSucces, String msg, List<Empleado> empleados) {
                     if(isSucces){
-                        Log.e("Error-klk", ".,ñ "+isSucces);
+                        Log.e("Error-klk", ".,ñ "+isSucces+ " "+empleados.toString());
                         loadAdapter(empleados);
                     }else{
                         msgError(msg);

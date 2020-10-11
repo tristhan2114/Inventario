@@ -294,13 +294,6 @@ public class ActivityFragmentUtils {
         return sample.format(time);
     }
 
-    public static String getDateNowStr() {
-        Calendar calendarNow = Calendar.getInstance();
-        calendarNow.setTimeZone(timeZoneDefault);
-        Date date = calendarNow.getTime();
-        return dateFormat.format(date);
-    }
-
     public static String getDateNowFB1() {
         Calendar calendarNow = Calendar.getInstance();
         calendarNow.setTimeZone(timeZoneDefault);

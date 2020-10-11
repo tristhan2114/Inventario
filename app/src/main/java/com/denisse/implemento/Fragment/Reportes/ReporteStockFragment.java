@@ -2,7 +2,6 @@ package com.denisse.implemento.Fragment.Reportes;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,8 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.denisse.implemento.Activity.DetailActivity;
-import com.denisse.implemento.Adapter.AdapterInventario;
 import com.denisse.implemento.Adapter.AdapterReporteStock;
 import com.denisse.implemento.Model.Implemento;
 import com.denisse.implemento.R;

@@ -4,10 +4,8 @@ package com.denisse.implemento.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.denisse.implemento.Fragment.Empleado.EmpleadoListFragment;
-import com.denisse.implemento.Fragment.Entrega.EntregaFragment;
 import com.denisse.implemento.Fragment.Entrega.EntregaListFragment;
 import com.denisse.implemento.Fragment.Reportes.ReporteFragment;
 import com.denisse.implemento.R;

@@ -2,7 +2,6 @@ package com.denisse.implemento.Utils.EntregaOp;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.CardView;
@@ -10,23 +9,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.denisse.implemento.Adapter.AdapterEntrega;
-import com.denisse.implemento.Adapter.AdapterEntregaList;
 import com.denisse.implemento.Model.Entrega.EntregaItem;
-import com.denisse.implemento.Model.Implemento;
 import com.denisse.implemento.R;
-import com.denisse.implemento.Utils.ActivityFragmentUtils;
-import com.denisse.implemento.Utils.ImplementoUtils.FirebaseImplemento;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class EntregasOp {
 
-    static String codigo = "", descripcion = "";
     public static void DialogInfService(final Context context, List<EntregaItem> items) {
         final Dialog MyDialog = new Dialog(context);
         CardView btnOk;

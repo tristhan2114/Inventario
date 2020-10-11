@@ -1,5 +1,6 @@
 package com.denisse.implemento.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
@@ -37,9 +38,8 @@ public class AdapterAdministracion extends RecyclerView.Adapter<AdapterAdministr
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Administracion item = listData.get(position);
-        //Log.v("wsdd",item.getDesciption());
         holder.lblNameUser.setText( (item.getName_user()!=null) ? item.getName_user() : "" );
         holder.lblCorreo.setText(item.getCorreo());
         holder.lblContrasenia.setText(item.getContrasenia());

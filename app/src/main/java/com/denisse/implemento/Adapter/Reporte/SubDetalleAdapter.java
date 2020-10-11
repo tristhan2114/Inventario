@@ -1,5 +1,6 @@
 package com.denisse.implemento.Adapter.Reporte;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -40,7 +41,7 @@ public class SubDetalleAdapter extends RecyclerView.Adapter<SubDetalleAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         EntregaItem model = entregaItems.get(position);
 
         if(colors!=null && colors.size()>0){
@@ -67,23 +68,6 @@ public class SubDetalleAdapter extends RecyclerView.Adapter<SubDetalleAdapter.Vi
     @Override
     public int getItemCount() {
         return entregaItems.size();
-    }
-
-    public static String getFechaFormat(String fecha) {
-        String respuesta = "";
-        try {
-            String fec[] = fecha.split(" ");
-            fecha = fec[0];
-            respuesta =
-                    ActivityFragmentUtils.ucFirst(ActivityFragmentUtils.getDayNameNumber(fecha, "day_name").substring(0,3)) +" "+
-                            ActivityFragmentUtils.getDayNameNumber(fecha, "day_number") +", "+
-                            ActivityFragmentUtils.getDayNameNumber(fecha, "Month").substring(0,3) +" "+
-                            ActivityFragmentUtils.getDayNameNumber(fecha, "years");
-        }catch (Exception e){
-            Log.e("Error-dsds", "..- "+e.getMessage());
-            respuesta = fecha;
-        }
-        return respuesta;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

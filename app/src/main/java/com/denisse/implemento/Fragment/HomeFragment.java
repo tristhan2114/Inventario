@@ -1,6 +1,7 @@
 package com.denisse.implemento.Fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -148,10 +149,16 @@ public class HomeFragment extends Fragment {
         });
 
         btnCerrarSesion.setOnClickListener(view -> {
-            FirebaseEmpleado.cerrarSesion(context);
-            SharedData.clearSharedPreferences(context);
-            startActivity(new Intent(context, LoginActivity.class));
-            getActivity().finish();
+            String msg = "¿Estas seguro de cerrar sesión?";
+            ActivityFragmentUtils.ShowMessageDefault(msg, context, new ActivityFragmentUtils.onClickDialog() {
+                @Override
+                public void onClickDialog(DialogInterface dialog, int id) {
+                    FirebaseEmpleado.cerrarSesion(context);
+                    SharedData.clearSharedPreferences(context);
+                    startActivity(new Intent(context, LoginActivity.class));
+                    getActivity().finish();
+                }
+            });
         });
 
         btnAdministracion.setOnClickListener(view -> {
@@ -201,7 +208,7 @@ public class HomeFragment extends Fragment {
         super.onResume();
         if(SharedData.getKey(context, SharedData.ROL) != null){
             if (SharedData.getKey(context, SharedData.ROL).equals(Constantes.ROL_ADMINISTRADOR) ||
-                    SharedData.getKey(context, SharedData.ROL).equals(Constantes.ROL_ASISTENTE)) {
+                    SharedData.getKey(context, SharedData.ROL).equals(Constantes.ROL_INSPECTOR)) {
                 createNotifyAlaram();
             }
         }

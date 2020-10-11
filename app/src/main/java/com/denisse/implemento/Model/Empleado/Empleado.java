@@ -23,19 +23,6 @@ public class Empleado implements Serializable {
     private Puesto puesto;
     private boolean estado;
 
-    /*public Empleado(String id, String ci, String nombres, String apellidos, int edad, String foto, Genero genero, Departamento departamento, Jornada jornada, boolean estado) {
-        this.id = id;
-        this.ci = ci;
-        this.nombres = nombres;
-        this.apellidos = apellidos;
-        this.edad = edad;
-        this.foto = foto;
-        this.genero = genero;
-        this.departamento = departamento;
-        this.jornada = jornada;
-        this.estado = estado;
-    }*/
-
     public Empleado(String id, String ci, String nombres, String apellidos, int edad, String foto, Genero genero, Departamento departamento, Jornada jornada, Puesto puesto, boolean estado) {
         this.id = id;
         this.ci = ci;

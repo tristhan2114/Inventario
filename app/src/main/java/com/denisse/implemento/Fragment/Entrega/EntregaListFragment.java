@@ -1,7 +1,6 @@
 package com.denisse.implemento.Fragment.Entrega;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,13 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.denisse.implemento.Activity.DetailActivity;
-import com.denisse.implemento.Adapter.AdapterEntrega;
 import com.denisse.implemento.Adapter.AdapterEntregaList;
-import com.denisse.implemento.Model.Empleado.Empleado;
 import com.denisse.implemento.Model.Entrega.EntregaModel;
 import com.denisse.implemento.R;
-import com.denisse.implemento.Utils.ActivityFragmentUtils;
-import com.denisse.implemento.Utils.EmpleadoUtils.FirebaseEmpleado;
 import com.denisse.implemento.Utils.EntregaOp.EntregasOp;
 import com.denisse.implemento.Utils.EntregaUtils.FirebaseEntrega;
 
@@ -146,16 +141,6 @@ public class EntregaListFragment extends Fragment {
                 //intent.putExtra("isCreate",true);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-            }
-        });
-    }
-
-
-    private void msgDialog(String msg) {
-        ActivityFragmentUtils.ShowMessageDefault(msg, context, new ActivityFragmentUtils.onClickDialog() {
-            @Override
-            public void onClickDialog(DialogInterface dialog, int id) {
-                dialog.dismiss();
             }
         });
     }

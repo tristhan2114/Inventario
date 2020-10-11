@@ -1,5 +1,6 @@
 package com.denisse.implemento.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +43,7 @@ public class AdapterReporteStock extends RecyclerView.Adapter<AdapterReporteStoc
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Implemento item = listData.get(position);
         if (isDelete != null && isDelete){
             holder.lyEliminar.setVisibility(View.GONE);

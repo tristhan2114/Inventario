@@ -1,5 +1,6 @@
 package com.denisse.implemento.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
@@ -10,12 +11,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.denisse.implemento.Model.Administracion;
 import com.denisse.implemento.Model.Entrega.EntregaModel;
 import com.denisse.implemento.R;
 import com.denisse.implemento.Model.Implemento;
 import com.denisse.implemento.Utils.ActivityFragmentUtils;
-import com.denisse.implemento.Utils.AdministracionOp.FirebaseAdministracion;
 import com.denisse.implemento.Utils.EntregaUtils.FirebaseEntrega;
 
 import java.util.List;
@@ -40,9 +39,8 @@ public class AdapterInventario extends RecyclerView.Adapter<AdapterInventario.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Implemento item = listData.get(position);
-        //Log.v("wsdd",item.getDesciption());
         holder.lblCodigo.setText(item.getCodigo());
         holder.lblArea.setText( (item.getDescripcion()!=null)? item.getDescripcion() : "");
         holder.lblDescripcion.setText(item.getDescripcion());

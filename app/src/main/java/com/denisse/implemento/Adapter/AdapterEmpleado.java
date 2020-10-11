@@ -1,5 +1,6 @@
 package com.denisse.implemento.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -36,9 +37,8 @@ public class AdapterEmpleado extends RecyclerView.Adapter<AdapterEmpleado.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Empleado item = listData.get(position);
-        //Log.v("wsdd",item.getDesciption());
         holder.lblArea.setText( (item.getDepartamento()!=null)? item.getDepartamento().getDescripcion() : "" );
         holder.lblJornada.setText(Html.fromHtml("Jornada: "+item.getJornada().getDescripcion()));
         String name = "";

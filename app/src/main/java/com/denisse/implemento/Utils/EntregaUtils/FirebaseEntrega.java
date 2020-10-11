@@ -6,11 +6,9 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.denisse.implemento.Adapter.AdapterEntregaList;
-import com.denisse.implemento.Model.Empleado.Empleado;
 import com.denisse.implemento.Model.Entrega.EntregaModel;
 import com.denisse.implemento.Model.Implemento;
 import com.denisse.implemento.Utils.ActivityFragmentUtils;
-import com.denisse.implemento.Utils.AdministracionOp.FirebaseAdministracion;
 import com.denisse.implemento.Utils.Alarma.AlarmaUtils;
 import com.denisse.implemento.Utils.Constantes;
 import com.denisse.implemento.Utils.ImplementoUtils.FirebaseImplemento;

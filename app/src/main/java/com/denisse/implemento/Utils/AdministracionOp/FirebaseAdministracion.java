@@ -94,9 +94,7 @@ public class FirebaseAdministracion {
                         //Log.e("Error-",".1. "+dataSnapshot.toString());
                         List<Administracion> administracions = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            //Log.e("Error-",".2. "+child.toString());
                             Administracion administracion = child.getValue(Administracion.class);
-                            //Log.e("Error-",".3. "+administracion.toString());
                             administracions.add(administracion);
                         }
                         progressDialog.dismiss();

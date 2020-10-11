@@ -123,44 +123,6 @@ public class FirebaseImplemento {
         databaseReference.addValueEventListener(eventListener);
     }
 
-    public static void getInventarioReporte(Context context, FbRsImplemento fbRsImplemento){
-        loading(context);
-        DatabaseReference databaseReference = getmDatabase().getReference(Constantes.REQUEST_IMPLEMENTOS);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Log.e("Error-",".1. "+dataSnapshot.toString());
-                if (dataSnapshot.exists()) {
-                    try {
-                        //Log.e("Error-",".1. "+dataSnapshot.toString());
-                        //List<Inventario> inventarios = (List<Inventario>) dataSnapshot.getValue(Inventario.class);
-                        List<Implemento> implementos = new ArrayList<>();
-                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            Implemento implemento = child.getValue(Implemento.class);
-                            Log.e("Error-",".3. "+implemento.toString());
-                            implementos.add(implemento);
-                        }
-                        progressDialog.dismiss();
-                        fbRsImplemento.isSuccesError(true, "ok", implementos);
-                    }catch (Exception e){
-                        Log.e("Error-",e.getMessage());
-                        progressDialog.dismiss();
-                        fbRsImplemento.isSuccesError(false, "No hay Implementos registrados", new ArrayList<>());
-                    }
-                }else {
-                    progressDialog.dismiss();
-                    fbRsImplemento.isSuccesError(false, "No hay Implementos registrados", new ArrayList<>());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                progressDialog.dismiss();
-                fbRsImplemento.isSuccesError(false, "No hay Implementos registrados e-database",new ArrayList<>());
-            }
-        });
-    }
-
     public static void createInventrio(Context context, Implemento implemento, FbRsImplemento fbRsImplemento){
         loading(context);
         DatabaseReference databaseReference = getmDatabaseReferenceSave();

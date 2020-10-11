@@ -16,12 +16,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.denisse.implemento.Activity.ContainerActivity;
 import com.denisse.implemento.Activity.DetailActivity;
-import com.denisse.implemento.Activity.LoginActivity;
 import com.denisse.implemento.R;
-import com.denisse.implemento.Utils.Constantes;
-import com.denisse.implemento.Utils.EmpleadoUtils.FirebaseEmpleado;
 import com.denisse.implemento.Utils.SharedData;
 
 public class ReporteFragment extends Fragment {

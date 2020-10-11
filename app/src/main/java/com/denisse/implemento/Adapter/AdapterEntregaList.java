@@ -1,5 +1,6 @@
 package com.denisse.implemento.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
@@ -10,13 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.denisse.implemento.Model.Entrega.EntregaItem;
 import com.denisse.implemento.Model.Entrega.EntregaModel;
 import com.denisse.implemento.R;
 import com.denisse.implemento.Utils.ActivityFragmentUtils;
@@ -46,7 +42,7 @@ public class AdapterEntregaList extends RecyclerView.Adapter<AdapterEntregaList.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         EntregaModel item = listData.get(position);
 
         holder.lblTipoEntrega.setText("Entrega a "+item.getTipo_entrega());

@@ -95,7 +95,11 @@ public class AlarmaUtils {
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             Alarma alarma = child.getValue(Alarma.class);
                             //Log.e("Error-",".3. "+alarma.toString());
-                            alarmas.add(alarma);
+                            if(alarma!=null){
+                                if (alarma.isEstado()){
+                                    alarmas.add(alarma);
+                                }
+                            }
                         }
                         fbAlarmEntregas.rsAlarm(false, "ok", alarmas);
                     }catch (Exception e){
